@@ -6,12 +6,16 @@ public class Exercicio {
     private String foto;
     private String nome;
     private String descricao;
+    private int repeticoes;
+    private int duracao;
 
-    public Exercicio(int id, String foto, String nome, String descricao){
+    public Exercicio(int id, String foto, String nome, String descricao, int repeticoes, int duracao){
         this.id = id;
         this.foto = foto;
         this.nome = nome;
         this.descricao = descricao;
+        this.repeticoes = repeticoes;
+        this.duracao = duracao;
 
     }
 
@@ -46,5 +50,18 @@ public class Exercicio {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public int getRepeticoes() { return repeticoes; }
+
+    public void setRepeticoes(int repeticoes) { this.repeticoes = repeticoes; }
+
+    public int getDuracao() { return duracao; }
+
+    public void setDuracao(int duracao) { this.duracao = duracao; }
+
+
+
 }
+
+
 
