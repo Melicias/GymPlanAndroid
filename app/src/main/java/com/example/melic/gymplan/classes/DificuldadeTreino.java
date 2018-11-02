@@ -3,13 +3,11 @@ package com.example.melic.gymplan.classes;
 public class DificuldadeTreino {
 
     private int id;
-    private String nome;
-    private String tipo;
+    private int dificuldade;
 
-    public DificuldadeTreino(int id, String nome, String tipo){
+    public DificuldadeTreino(int id, int dificuldade){
         this.id = id;
-        this.nome = nome;
-        this.tipo = tipo;
+        this.dificuldade = dificuldade;
     }
 
     public int getId() {
@@ -20,19 +18,11 @@ public class DificuldadeTreino {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public int getDificuldade() {
+        return dificuldade;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setDificuldade(int dificuldade) {
+        this.dificuldade = dificuldade;
     }
 }

@@ -20,7 +20,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         this.tvRegistar = (TextView)findViewById(R.id.tvRegistar);
-
+        this.btLogin = (Button)findViewById(R.id.btLogin);
+        this.etEmail = (EditText)findViewById(R.id.etEmail);
+        this.etPassword = (EditText)findViewById(R.id.etPassword);
 
 
         this.tvRegistar.setOnClickListener(new View.OnClickListener() {
@@ -30,5 +32,43 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        this.btLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkValues()){
+                    if(emailExists()){
+                        if(login()){
+                            //nova intent
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public boolean checkValues(){
+        //check if email is nto null and if it is an email
+        if(this.etEmail.getText().toString() != null && android.util.Patterns.EMAIL_ADDRESS.matcher(this.etEmail.getText().toString()).matches()){
+            if(this.etPassword.getText().toString() != null){
+                //dados inseridos
+                return true;
+            }else{
+                //password e null
+            }
+        }else{
+            //email invalido ou null
+        }
+        return false;
+    }
+
+    public boolean emailExists(){
+        //check on db if email exists
+        return true;
+    }
+
+    public boolean login(){
+        //make the login
+        return true;
     }
 }
