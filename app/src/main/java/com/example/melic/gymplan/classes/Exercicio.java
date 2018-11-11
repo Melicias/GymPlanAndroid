@@ -16,7 +16,18 @@ public class Exercicio {
         this.descricao = descricao;
         this.repeticoes = repeticoes;
         this.duracao = duracao;
+    }
 
+    public Exercicio(int id, String foto, String nome, String descricao, int repeticoes_duracao, boolean repeticoes){
+        this.id = id;
+        this.foto = foto;
+        this.nome = nome;
+        this.descricao = descricao;
+        if(repeticoes == true){
+            this.repeticoes = repeticoes_duracao;
+        }else{
+            this.duracao = repeticoes_duracao;
+        }
     }
 
     public int getId() {
