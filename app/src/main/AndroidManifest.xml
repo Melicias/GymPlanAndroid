@@ -18,10 +18,14 @@
         </activity>
         <activity
             android:name=".RegistoActivity"
-            android:parentActivityName=".LoginActivity"></activity>
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".IndexActivity"
             android:label="@string/title_activity_index"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MeusTreinosActivity"
+            android:label="@string/title_activity_meus_treinos"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
