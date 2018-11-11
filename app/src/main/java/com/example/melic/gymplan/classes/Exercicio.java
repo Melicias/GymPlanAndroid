@@ -59,8 +59,10 @@ public class Exercicio {
 
     public void setDuracao(int duracao) { this.duracao = duracao; }
 
-
-
+    @Override
+    public String toString() {
+        return "Repetições: " + repeticoes ;
+    }
 }
 
 

@@ -25,4 +25,10 @@ public class DificuldadeTreino {
     public void setDificuldade(int dificuldade) {
         this.dificuldade = dificuldade;
     }
+
+
+    @Override
+    public String toString() {
+        return  "Dificuldade: " + dificuldade ;
+    }
 }

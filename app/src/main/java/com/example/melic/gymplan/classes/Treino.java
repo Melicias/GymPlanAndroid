@@ -55,7 +55,7 @@ public class Treino {
     @NonNull
     @Override
     public String toString() {
-        return "Id: " + id ;
+        return " Repetições: " + repeticoes + "; " + dificuldade + ";" + categoria;
     }
     
 }
