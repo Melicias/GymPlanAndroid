@@ -12,23 +12,22 @@ public class LoginActivity extends AppCompatActivity {
 
     Button btLogin;
     TextView tvRegistar;
-    EditText etEmail,etPassword;
+    EditText etEmail, etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        this.tvRegistar = (TextView)findViewById(R.id.tvRegistar);
-        this.btLogin = (Button)findViewById(R.id.btLogin);
-        this.etEmail = (EditText)findViewById(R.id.etEmail);
-        this.etPassword = (EditText)findViewById(R.id.etPassword);
-
+        this.tvRegistar = (TextView) findViewById(R.id.tvRegistar);
+        this.btLogin = (Button) findViewById(R.id.btLogin);
+        this.etEmail = (EditText) findViewById(R.id.etEmail);
+        this.etPassword = (EditText) findViewById(R.id.etPassword);
 
         this.tvRegistar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getBaseContext(),RegistoActivity.class);
+                Intent i = new Intent(getBaseContext(), RegistoActivity.class);
                 startActivity(i);
             }
         });
@@ -36,39 +35,43 @@ public class LoginActivity extends AppCompatActivity {
         this.btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkValues()){
-                    if(emailExists()){
-                        if(login()){
-                            //nova intent
-                        }
-                    }
-                }
+                //if (checkValues()) {
+                    //if (emailExists()) {
+                        //if (login()) {
+                            asd();
+                        //}
+                    //}
+                //}
             }
         });
     }
 
-    public boolean checkValues(){
+    public boolean checkValues() {
         //check if email is nto null and if it is an email
-        if(this.etEmail.getText().toString() != null && android.util.Patterns.EMAIL_ADDRESS.matcher(this.etEmail.getText().toString()).matches()){
-            if(this.etPassword.getText().toString() != null){
+        if (this.etEmail.getText().toString() != null && android.util.Patterns.EMAIL_ADDRESS.matcher(this.etEmail.getText().toString()).matches()) {
+            if (this.etPassword.getText().toString() != null) {
                 //dados inseridos
                 return true;
-            }else{
+            } else {
                 //password e null
             }
-        }else{
+        } else {
             //email invalido ou null
         }
         return false;
     }
 
-    public boolean emailExists(){
+    public boolean emailExists() {
         //check on db if email exists
         return true;
     }
+    public void asd() {
+        Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
+        startActivity(Index);
+    }
 
-    public boolean login(){
-        //make the login
+    public boolean login() {
+
         return true;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.melic.gymplan.classes;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 
 public class Treino {
@@ -48,6 +50,12 @@ public class Treino {
 
     public void removeExercicio(int index){
         this.exercicios.remove(index);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Id: " + id ;
     }
     
 }

@@ -16,9 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegistoActivity"
-            android:parentActivityName="com.example.melic.gymplan.LoginActivity">
-        </activity>
+        <activity
+            android:name=".RegistoActivity"
+            android:parentActivityName=".LoginActivity"></activity>
+        <activity
+            android:name=".IndexActivity"
+            android:label="@string/title_activity_index"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
