@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/treinocv">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/nomeTreino"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="TREINO SABIO SOBRE PILA grande"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textviewcategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nomeTreino"
+                android:paddingLeft="20dp"
+                android:text="Categoria: " />
+
+            <TextView
+                android:id="@+id/textviewdificuldade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textviewcategoria"
+                android:paddingLeft="20dp"
+                android:text="Dificuldade: " />
+
+            <TextView
+                android:id="@+id/tvCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nomeTreino"
+                android:layout_toRightOf="@+id/textviewcategoria"
+                android:text="Abdominais" />
+
+            <TextView
+                android:id="@+id/tvDificuldade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textviewcategoria"
+                android:layout_toRightOf="@+id/textviewdificuldade"
+                android:text="1" />
+
+            <TextView
+                android:id="@+id/textviewrepeticoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textviewdificuldade"
+                android:paddingLeft="20dp"
+                android:text="Repetições: " />
+
+            <TextView
+                android:id="@+id/tvRepeticoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textviewdificuldade"
+                android:layout_toRightOf="@+id/textviewrepeticoes"
+                android:text="12" />
+
+            <TextView
+                android:id="@+id/tvNumeroExercicios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textviewdificuldade"
+                android:layout_alignParentRight="true"
+                android:text="12" />
+
+            <TextView
+                android:id="@+id/textviewNumeroExercicios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textviewdificuldade"
+                android:layout_alignParentRight="true"
+                android:layout_toLeftOf="@+id/tvNumeroExercicios"
+                android:paddingRight="20dp"
+                android:text="Nr.Exercicios: " />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

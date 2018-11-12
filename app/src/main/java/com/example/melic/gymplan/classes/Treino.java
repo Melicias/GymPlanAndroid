@@ -7,13 +7,15 @@ import java.util.ArrayList;
 public class Treino {
 
     private int id;
+    private String nome;
     private int repeticoes;
     private DificuldadeTreino dificuldade;
     private CategoriaTreino categoria;
     private ArrayList<Exercicio> exercicios;
 
-    public Treino(int id, int repeticoes, DificuldadeTreino dificuldade, CategoriaTreino categoria){
+    public Treino(int id,String nome, int repeticoes, DificuldadeTreino dificuldade, CategoriaTreino categoria){
         this.id = id;
+        this.nome = nome;
         this.repeticoes=repeticoes;
         this.dificuldade=dificuldade;
         this.categoria = categoria;
@@ -23,6 +25,10 @@ public class Treino {
     public int getId() { return id; }
 
     public void setId(int id) { this.id = id; }
+
+    public String getNome(){ return nome;}
+
+    public void setNome(String nome){ this.nome = nome;}
 
     public int getRepeticoes() { return repeticoes; }
 

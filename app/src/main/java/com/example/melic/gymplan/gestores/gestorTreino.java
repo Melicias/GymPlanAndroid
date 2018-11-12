@@ -22,11 +22,11 @@ public class gestorTreino {
 
     private void adicionarDados(){
         GestorExercicio ge = new GestorExercicio();
-        this.treinos.add(new Treino(1, 5, new DificuldadeTreino(1,5),new CategoriaTreino(1,"Perda de peso")));
+        this.treinos.add(new Treino(1,"treino 1", 5, new DificuldadeTreino(1,5),new CategoriaTreino(1,"Perda de peso")));
         this.treinos.get(0).setExercicios(ge.getExercicios());
-        this.treinos.add(new Treino(2, 4, new DificuldadeTreino(1,5),new CategoriaTreino(1,"Perda de peso")));
+        this.treinos.add(new Treino(2,"treino 2", 4, new DificuldadeTreino(1,5),new CategoriaTreino(1,"Perda de peso")));
         this.treinos.get(1).setExercicios(ge.getExercicios());
-        this.treinos.add(new Treino(3, 6, new DificuldadeTreino(1,6),new CategoriaTreino(1,"Ganhar massa muscular")));
+        this.treinos.add(new Treino(3, "treino 3", 6, new DificuldadeTreino(1,6),new CategoriaTreino(1,"Ganhar massa muscular")));
         this.treinos.get(2).setExercicios(ge.getExercicios());
     }
 
