@@ -6,7 +6,7 @@ import com.example.melic.gymplan.classes.Treino;
 
 import java.util.ArrayList;
 
-public class gestorTreino {
+public class GestorTreino {
 
     /*
     * Treino
@@ -15,7 +15,7 @@ public class gestorTreino {
 
     private ArrayList<Treino> treinos;
 
-    public gestorTreino(){
+    public GestorTreino(){
         this.treinos = new ArrayList<>();
         adicionarDados();
     }
@@ -30,7 +30,7 @@ public class gestorTreino {
         this.treinos.get(2).setExercicios(ge.getExercicios());
     }
 
-    public ArrayList<Treino> getTreino(){
+    public ArrayList<Treino> getTreinos(){
         return this.treinos;
     }
 
