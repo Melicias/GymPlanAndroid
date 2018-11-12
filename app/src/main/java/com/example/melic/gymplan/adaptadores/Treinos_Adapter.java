@@ -50,9 +50,9 @@ public class Treinos_Adapter extends
 
         Nome.setText(treino.getNome());
         Categoria.setText(treino.getCategoria().getNome());
-        Dificuldade.setText(treino.getDificuldade().getDificuldade());
-        Repeticoes.setText(treino.getRepeticoes());
-        NumeroExercicios.setText(treino.getExercicios().size());
+        Dificuldade.setText("" + treino.getDificuldade().getDificuldade());
+        Repeticoes.setText("" +treino.getRepeticoes());
+        NumeroExercicios.setText("" + treino.getExercicios().size());
 
     }
     @Override
