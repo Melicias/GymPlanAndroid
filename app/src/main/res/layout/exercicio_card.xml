@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/exerciciocv">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/nomeExercicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="Gajas Boas"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvDuracao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image"
+                android:layout_alignParentRight="true"
+                android:layout_toLeftOf="@+id/textviewrepeticoes"
+                android:paddingRight="20dp"
+                android:text="Duração : " />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDuracao"
+                android:layout_toRightOf="@+id/textviewrepeticoes"
+                />
+
+            <TextView
+                android:id="@+id/textviewrepeticoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDescricao"
+                android:paddingLeft="20dp"
+                android:text="Repetições: " />
+
+            <TextView
+                android:id="@+id/tvRepeticoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDescricao"
+                android:layout_toRightOf="@+id/tvDuracao"
+                android:text="12" />
+
+            <TextView
+                android:id="@+id/tvDescricao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDuracao"
+                android:layout_alignParentRight="true"
+                android:text="Descricao Linda" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
