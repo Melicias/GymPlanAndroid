@@ -20,27 +20,30 @@
                 android:layout_alignParentTop="true"
                 android:text="Gajas Boas"
                 android:textSize="18sp" />
-            <TextView
-                android:id="@+id/textviewFoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textviewcategoria"
-                android:paddingLeft="20dp"
-                android:text="Dificuldade: " />
 
             <TextView
-                android:id="@+id/tvFoto"
+                android:id="@+id/tvDuracao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textviewcategoria"
-                android:layout_toRightOf="@+id/textviewdificuldade"
-                android:text="1" />
+                android:layout_below="@+id/image"
+                android:layout_alignParentRight="true"
+                android:layout_toLeftOf="@+id/textviewrepeticoes"
+                android:paddingRight="20dp"
+                android:text="Duração : " />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDuracao"
+                android:layout_toRightOf="@+id/textviewrepeticoes"
+                />
 
             <TextView
                 android:id="@+id/textviewrepeticoes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textviewdificuldade"
+                android:layout_below="@+id/tvDescricao"
                 android:paddingLeft="20dp"
                 android:text="Repetições: " />
 
@@ -48,8 +51,8 @@
                 android:id="@+id/tvRepeticoes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textviewdificuldade"
-                android:layout_toRightOf="@+id/textviewrepeticoes"
+                android:layout_below="@+id/tvDescricao"
+                android:layout_toRightOf="@+id/tvDuracao"
                 android:text="12" />
 
             <TextView
@@ -59,17 +62,6 @@
                 android:layout_below="@+id/tvDuracao"
                 android:layout_alignParentRight="true"
                 android:text="Descricao Linda" />
-
-            <TextView
-                android:id="@+id/tvDuracao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textviewdificuldade"
-                android:layout_alignParentRight="true"
-                android:layout_toLeftOf="@+id/tvNumeroExercicios"
-                android:paddingRight="20dp"
-                android:text="Duração : " />
-
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
