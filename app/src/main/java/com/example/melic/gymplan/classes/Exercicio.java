@@ -25,8 +25,10 @@ public class Exercicio {
         this.descricao = descricao;
         if(repeticoes == true){
             this.repeticoes = repeticoes_duracao;
+            this.duracao = 0;
         }else{
             this.duracao = repeticoes_duracao;
+            this.repeticoes = 0;
         }
     }
 

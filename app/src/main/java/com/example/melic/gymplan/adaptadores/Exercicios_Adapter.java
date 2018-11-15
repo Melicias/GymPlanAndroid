@@ -53,9 +53,14 @@ public class Exercicios_Adapter extends
 
         Nome.setText(exercicio.getNome());
         new DownloadImageTask(Image).execute(exercicio.getFoto());
-        Repeticoes.setText(exercicio.getFoto());
-        Descricao.setText(exercicio.getDuracao());
-        Duracao.setText(exercicio.getDuracao());
+        if (exercicio.getDuracao() != 0){
+            Duracao.setText(exercicio.getDuracao());
+            Repeticoes.setVisibility(View.GONE);
+        }else{
+            Repeticoes.setText(exercicio.getRepeticoes());
+            Duracao.setVisibility(View.GONE);
+        }
+        Descricao.setText(exercicio.getDescricao());
     }
 
     @Override
