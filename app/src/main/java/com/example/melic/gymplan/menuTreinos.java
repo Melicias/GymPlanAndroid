@@ -4,12 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.melic.gymplan.adaptadores.Treinos_Adapter;
 import com.example.melic.gymplan.classes.Treino;
@@ -79,15 +82,37 @@ public class menuTreinos extends Fragment {
 
         RecyclerView rvTreinos =(RecyclerView)view.findViewById(R.id.rvTreinos);
         // Initialize contacts
-        GestorTreino gt = new GestorTreino();
-        this.treinos = gt.getTreinos();
-        // Create adapter passing in the sample user data
-        Treinos_Adapter AdaptadorTreinos = new Treinos_Adapter(treinos);
-        // Attach the adapter to the recyclerview to populate items
-        rvTreinos.setAdapter(AdaptadorTreinos);
-        // Set layout manager to position the items
-        rvTreinos.setLayoutManager(new LinearLayoutManager(getContext()));
+        if(this.escolha == MENU){
+            //menu option
+            GestorTreino gt = new GestorTreino();
+            this.treinos = gt.getTreinos();
+        }else{
+            //meus treinos option
+            GestorTreino gt = new GestorTreino();
+            this.treinos = gt.getTreinos();
+        }
 
+        if(this.treinos.size() == 0){
+            ConstraintLayout cl = (ConstraintLayout)view.findViewById(R.id.clTreinos);
+            cl.setVisibility(view.GONE);
+            if(this.escolha == MENU){
+                TextView tv = (TextView)view.findViewById(R.id.tvNaoHaTreinos);
+                tv.setVisibility(view.VISIBLE);
+            }else{
+                Button btRederecionarMenuTreinos = (Button)view.findViewById(R.id.btRederecionarMenuTreinos);
+                btRederecionarMenuTreinos.setVisibility(view.VISIBLE);
+                btRederecionarMenuTreinos.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+            }
+        }else{
+            Treinos_Adapter AdaptadorTreinos = new Treinos_Adapter(treinos);
+            rvTreinos.setAdapter(AdaptadorTreinos);
+            rvTreinos.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
         return view;
     }
 

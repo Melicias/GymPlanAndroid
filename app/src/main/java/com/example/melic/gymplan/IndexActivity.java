@@ -50,6 +50,9 @@ public class IndexActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.setCheckedItem(R.id.nav_meusPlanos);
+        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_meusPlanos));
     }
 
     @Override

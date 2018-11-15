@@ -54,6 +54,8 @@ public class Treinos_Adapter extends
         Repeticoes.setText("" +treino.getRepeticoes());
         NumeroExercicios.setText("" + treino.getExercicios().size());
 
+
+
     }
     @Override
     public int getItemCount() {
@@ -73,8 +75,6 @@ public class Treinos_Adapter extends
             tvDificuldade = (TextView) itemView.findViewById(R.id.tvDificuldade);
             tvRepeticoes = (TextView) itemView.findViewById(R.id.tvRepeticoes);
             tvNumeroExercicios = (TextView) itemView.findViewById(R.id.tvNumeroExercicios);
-
-
         }
     }
 }
