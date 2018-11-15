@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
                 //if (checkValues()) {
                     //if (emailExists()) {
                         //if (login()) {
-                            asd();
+                            Registo();
                         //}
                     //}
                 //}
@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         //check on db if email exists
         return true;
     }
-    public void asd() {
+    public void Registo() {
         Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
         startActivity(Index);
     }

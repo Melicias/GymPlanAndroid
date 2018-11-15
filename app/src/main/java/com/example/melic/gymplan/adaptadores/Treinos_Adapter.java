@@ -2,6 +2,7 @@ package com.example.melic.gymplan.adaptadores;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.melic.gymplan.ExerciciosActivity;
+import com.example.melic.gymplan.IndexActivity;
+import com.example.melic.gymplan.LoginActivity;
 import com.example.melic.gymplan.R;
 import com.example.melic.gymplan.classes.Treino;
 
@@ -17,7 +21,7 @@ import java.util.ArrayList;
 public class Treinos_Adapter extends
         RecyclerView.Adapter<Treinos_Adapter.ViewHolder> {
     private ArrayList<Treino> treinos;
-
+    private Context context;
     public Treinos_Adapter(ArrayList<Treino> treinos) {
         this.treinos = treinos;
     }
@@ -26,7 +30,7 @@ public class Treinos_Adapter extends
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        Context context = viewGroup.getContext();
+        context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
@@ -75,6 +79,16 @@ public class Treinos_Adapter extends
             tvDificuldade = (TextView) itemView.findViewById(R.id.tvDificuldade);
             tvRepeticoes = (TextView) itemView.findViewById(R.id.tvRepeticoes);
             tvNumeroExercicios = (TextView) itemView.findViewById(R.id.tvNumeroExercicios);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent exercicios = new Intent(context, ExerciciosActivity.class);
+                    context.startActivity(exercicios);
+                }
+            });
         }
+
+
     }
 }
