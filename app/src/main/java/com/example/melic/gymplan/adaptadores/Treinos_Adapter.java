@@ -3,7 +3,11 @@ package com.example.melic.gymplan.adaptadores;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,7 @@ import com.example.melic.gymplan.IndexActivity;
 import com.example.melic.gymplan.LoginActivity;
 import com.example.melic.gymplan.R;
 import com.example.melic.gymplan.classes.Treino;
+import com.example.melic.gymplan.exerciciosFrag;
 
 import java.util.ArrayList;
 
@@ -79,9 +84,18 @@ public class Treinos_Adapter extends
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent exercicios = new Intent(context, ExerciciosActivity.class);
+                    /*Intent exercicios = new Intent(context, ExerciciosActivity.class);
                     exercicios.putExtra("treino", treinos.get(getAdapterPosition()));
-                    context.startActivity(exercicios);
+                    context.startActivity(exercicios);*/
+                    Fragment fragExercicios = new exerciciosFrag();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("treino", treinos.get(getAdapterPosition()));
+                    fragExercicios.setArguments(bundle);
+                    ((AppCompatActivity) context).getSupportActionBar().setTitle(treinos.get(getAdapterPosition()).getNome());
+                    ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragExercicios).addToBackStack(null).commit();
+                    //TESTAR CODIGO NAO SEI SE FUNCIONA!!!!!!
+                    //TESTAR
+                    //TESTAR
                 }
             });
         }
