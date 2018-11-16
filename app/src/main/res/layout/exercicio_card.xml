@@ -47,8 +47,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvNomeExercicio"
                     android:layout_alignStart="@+id/tvNomeExercicio"
-                    android:layout_marginStart="-4dp"
-                    android:layout_marginTop="34dp"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="33dp"
                     android:text="Duração: 2:00"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
