@@ -26,22 +26,7 @@
             android:label="@string/title_activity_index"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-       <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-        </intent-filter>
 
-        <meta-data
-            android:name="android.app.searchable"
-            android:resource="@layout/searchable"
-            />
-        <activity
-            android:name=".MeusTreinosActivity"
-            android:label="@string/title_activity_meus_treinos"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ExerciciosActivity"></activity>
         <meta-data
             android:name="android.app.default_searchable"
             android:value="com.apkgetter.SearchResultsActivity" />

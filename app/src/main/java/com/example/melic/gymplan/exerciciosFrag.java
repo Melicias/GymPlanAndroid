@@ -49,7 +49,7 @@ public class exerciciosFrag extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.treino = getArguments().getParcelable(ARG_PARAM);
+            this.treino = (Treino)getArguments().getSerializable(ARG_PARAM);
         }
     }
 

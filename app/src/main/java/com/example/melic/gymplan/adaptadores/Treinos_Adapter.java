@@ -2,11 +2,9 @@ package com.example.melic.gymplan.adaptadores;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,9 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.melic.gymplan.ExerciciosActivity;
-import com.example.melic.gymplan.IndexActivity;
-import com.example.melic.gymplan.LoginActivity;
 import com.example.melic.gymplan.R;
 import com.example.melic.gymplan.classes.Treino;
 import com.example.melic.gymplan.exerciciosFrag;
@@ -93,9 +88,6 @@ public class Treinos_Adapter extends
                     fragExercicios.setArguments(bundle);
                     ((AppCompatActivity) context).getSupportActionBar().setTitle(treinos.get(getAdapterPosition()).getNome());
                     ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragExercicios).addToBackStack(null).commit();
-                    //TESTAR CODIGO NAO SEI SE FUNCIONA!!!!!!
-                    //TESTAR
-                    //TESTAR
                 }
             });
         }

@@ -27,29 +27,13 @@ import android.view.MenuItem;
 
 
 public class IndexActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, menuTreinos.OnFragmentInteractionListener, minhaConta.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        menuTreinos.OnFragmentInteractionListener,
+        minhaConta.OnFragmentInteractionListener,
+        exerciciosFrag.OnFragmentInteractionListener {
 
     Toolbar toolbar;
     boolean first = true;
-
-   @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.dashboard, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        SearchManager searchManager = (SearchManager) IndexActivity.this.getSystemService(Context.SEARCH_SERVICE);
-
-        android.widget.SearchView searchView = null;
-        if (searchItem != null) {
-            searchView = (android.widget.SearchView) searchItem.getActionView();
-        }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(IndexActivity.this.getComponentName()));
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
 
 
     @Override
@@ -94,8 +78,6 @@ public class IndexActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
