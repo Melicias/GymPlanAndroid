@@ -1,6 +1,8 @@
 package com.example.melic.gymplan.classes;
 
-public class CategoriaTreino {
+import java.io.Serializable;
+
+public class CategoriaTreino implements Serializable {
     private int id;
     private String nome;
 

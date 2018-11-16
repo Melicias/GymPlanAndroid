@@ -20,11 +20,12 @@ public class GestorExercicio {
     }
 
     private void adicionarDados(){
-        this.exercicios.add(new Exercicio(1,"asdasda","Abs","descricao123",12,true));
-        this.exercicios.add(new Exercicio(2,"asdasda","Abs2","descricao123",12,true));
-        this.exercicios.add(new Exercicio(3,"asdasda","Abs3","descricao123",12,true));
-        this.exercicios.add(new Exercicio(4,"asdasda","Abs4","descricao123",12,true));
-        this.exercicios.add(new Exercicio(5,"asdasda","Abs5","descricao123",12,true));
+        String url = "http://www.spekeapartments.com/sites/default/files/styles/my_lightbox/public/gallery/gym8.jpg?itok=WhjbWtUA";
+        this.exercicios.add(new Exercicio(1,url,"Abs","descricao123",12,true));
+        this.exercicios.add(new Exercicio(2,url,"Abs2","descricao123",12,true));
+        this.exercicios.add(new Exercicio(3,url,"Abs3","descricao123",12,true));
+        this.exercicios.add(new Exercicio(4,url,"Abs4","descricao123",66,false));
+        this.exercicios.add(new Exercicio(5,url,"Abs5","descricao123",12,true));
     }
 
     public ArrayList<Exercicio> getExercicios(){

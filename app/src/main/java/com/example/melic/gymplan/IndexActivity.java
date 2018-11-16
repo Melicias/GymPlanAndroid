@@ -25,12 +25,14 @@ import android.widget.Button;
 public class IndexActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, menuTreinos.OnFragmentInteractionListener, minhaConta.OnFragmentInteractionListener {
 
+    Toolbar toolbar;
+    boolean first = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -53,6 +55,7 @@ public class IndexActivity extends AppCompatActivity
 
         navigationView.setCheckedItem(R.id.nav_meusPlanos);
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_meusPlanos));
+        this.first = false;
     }
 
     @Override
@@ -105,6 +108,7 @@ public class IndexActivity extends AppCompatActivity
             Bundle bundle = new Bundle();
             bundle.putInt("escolha", menuTreinos.MENU);
             fragment.setArguments(bundle);
+            toolbar.setTitle("Todos os treinos");
             /*if (fragment == null) {
                 fTransaction.add(R.id.content_frame, fragment, "uniqueTag").addToBackStack(null).commit();
             }
@@ -117,8 +121,10 @@ public class IndexActivity extends AppCompatActivity
             Bundle bundle = new Bundle();
             bundle.putInt("escolha", menuTreinos.MEU);
             fragment.setArguments(bundle);
+            toolbar.setTitle("Meus treinos");
         } else if (id == R.id.nav_minhaConta) {
             tag = "minhaConta";
+            toolbar.setTitle("Minha treinos");
             fragment = new minhaConta();
         } else if (id == R.id.nav_logout) {
 
@@ -127,7 +133,8 @@ public class IndexActivity extends AppCompatActivity
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment,tag);
-            ft.addToBackStack(null);
+            if(!first)
+                ft.addToBackStack(null);
             ft.commit();
         }
 

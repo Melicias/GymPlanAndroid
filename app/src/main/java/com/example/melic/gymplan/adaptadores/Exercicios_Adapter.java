@@ -16,6 +16,7 @@ import com.example.melic.gymplan.classes.DownloadImageTask;
 import com.example.melic.gymplan.classes.Exercicio;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Exercicios_Adapter extends
         RecyclerView.Adapter<Exercicios_Adapter.ViewHolder> {
@@ -47,20 +48,18 @@ public class Exercicios_Adapter extends
         TextView Nome = viewHolder.tvNome;
         ImageView Image = viewHolder.image;
         TextView Repeticoes = viewHolder.tvRepeticoes;
-        TextView Descricao = viewHolder.tvDescricao;
         TextView Duracao = viewHolder.tvDuracao;
 
 
         Nome.setText(exercicio.getNome());
         new DownloadImageTask(Image).execute(exercicio.getFoto());
         if (exercicio.getDuracao() != 0){
-            Duracao.setText(exercicio.getDuracao());
+            Duracao.setText("Duração: " + getDurationBreakdown(exercicio.getDuracao()));
             Repeticoes.setVisibility(View.GONE);
         }else{
-            Repeticoes.setText(exercicio.getRepeticoes());
+            Repeticoes.setText("Repetições: " + exercicio.getRepeticoes());
             Duracao.setVisibility(View.GONE);
         }
-        Descricao.setText(exercicio.getDescricao());
     }
 
     @Override
@@ -70,19 +69,32 @@ public class Exercicios_Adapter extends
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvNome, tvRepeticoes, tvDescricao, tvDuracao;
+        public TextView tvNome, tvRepeticoes, tvDuracao;
         public ImageView image;
 
         public ViewHolder(View itemView) {
 
             super(itemView);
-            tvNome = (TextView) itemView.findViewById(R.id.nomeExercicio);
-            image = (ImageView) itemView.findViewById(R.id.image);
+            tvNome = (TextView) itemView.findViewById(R.id.tvNomeExercicio);
+            image = (ImageView) itemView.findViewById(R.id.ivExercicio);
             tvRepeticoes = (TextView) itemView.findViewById(R.id.tvRepeticoes);
-            tvDescricao = (TextView) itemView.findViewById(R.id.tvDescricao);
             tvDuracao = (TextView) itemView.findViewById(R.id.tvDuracao);
 
         }
+    }
+
+    public static String getDurationBreakdown(int millis)
+    {
+        int mins = millis / 60;
+        int remainder = millis - mins * 60;
+        int secs = remainder;
+
+        /*StringBuilder sb = new StringBuilder(64);
+        sb.append(mins);
+        sb.append(":");
+        sb.append(secs);
+        return(sb.toString());*/
+        return String.format("%02d:%02d",mins,secs);
     }
 }
 
