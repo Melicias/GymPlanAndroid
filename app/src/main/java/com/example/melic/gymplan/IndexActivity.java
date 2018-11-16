@@ -1,7 +1,10 @@
 package com.example.melic.gymplan;
 
 import android.app.FragmentManager;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.SearchView;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +13,8 @@ import android.support.design.widget.Snackbar;
 //import android.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 
 
 public class IndexActivity extends AppCompatActivity
@@ -27,6 +31,26 @@ public class IndexActivity extends AppCompatActivity
 
     Toolbar toolbar;
     boolean first = true;
+
+   @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.dashboard, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchManager searchManager = (SearchManager) IndexActivity.this.getSystemService(Context.SEARCH_SERVICE);
+
+        android.widget.SearchView searchView = null;
+        if (searchItem != null) {
+            searchView = (android.widget.SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(IndexActivity.this.getComponentName()));
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +67,9 @@ public class IndexActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
+
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -67,6 +94,7 @@ public class IndexActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
 
 
     @SuppressWarnings("StatementWithEmptyBody")
