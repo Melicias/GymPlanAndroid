@@ -26,6 +26,7 @@ public class IndexActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, menuTreinos.OnFragmentInteractionListener, minhaConta.OnFragmentInteractionListener {
 
     Toolbar toolbar;
+    boolean first = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class IndexActivity extends AppCompatActivity
 
         navigationView.setCheckedItem(R.id.nav_meusPlanos);
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_meusPlanos));
+        this.first = false;
     }
 
     @Override
@@ -131,7 +133,8 @@ public class IndexActivity extends AppCompatActivity
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment,tag);
-            ft.addToBackStack(null);
+            if(!first)
+                ft.addToBackStack(null);
             ft.commit();
         }
 

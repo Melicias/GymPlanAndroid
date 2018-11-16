@@ -50,15 +50,11 @@ public class Treinos_Adapter extends
         TextView Repeticoes = viewHolder.tvRepeticoes;
         TextView NumeroExercicios = viewHolder.tvNumeroExercicios;
 
-
-
         Nome.setText(treino.getNome());
         Categoria.setText(treino.getCategoria().getNome());
         Dificuldade.setText("" + treino.getDificuldade().getDificuldade());
         Repeticoes.setText("" +treino.getRepeticoes());
         NumeroExercicios.setText("" + treino.getExercicios().size());
-
-
 
     }
     @Override
@@ -84,11 +80,10 @@ public class Treinos_Adapter extends
                 @Override
                 public void onClick(View view) {
                     Intent exercicios = new Intent(context, ExerciciosActivity.class);
+                    exercicios.putExtra("treino", treinos.get(getAdapterPosition()));
                     context.startActivity(exercicios);
                 }
             });
         }
-
-
     }
 }

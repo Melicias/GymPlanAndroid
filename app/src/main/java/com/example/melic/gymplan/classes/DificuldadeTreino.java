@@ -1,6 +1,8 @@
 package com.example.melic.gymplan.classes;
 
-public class DificuldadeTreino {
+import java.io.Serializable;
+
+public class DificuldadeTreino implements Serializable {
 
     private int id;
     private int dificuldade;

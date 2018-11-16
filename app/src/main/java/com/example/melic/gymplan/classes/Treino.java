@@ -2,9 +2,10 @@ package com.example.melic.gymplan.classes;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Treino {
+public class Treino implements Serializable {
 
     private int id;
     private String nome;
