@@ -10,5 +10,5 @@ public class ExerciciosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercicios);
     }
-
+        //interligar exercicios com atividade
 }
