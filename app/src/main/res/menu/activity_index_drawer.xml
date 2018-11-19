@@ -6,10 +6,10 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_todosTreinos"
-            android:title="Todos os planos" />
+            android:title="Todos os treinos" />
         <item
             android:id="@+id/nav_meusPlanos"
-            android:title="Meus planos" />
+            android:title="Meus treinos" />
         <item
             android:id="@+id/nav_minhaConta"
             android:title="A minha conta" />

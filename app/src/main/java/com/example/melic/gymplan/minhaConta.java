@@ -51,7 +51,6 @@ public class minhaConta extends Fragment {
             if (this.etApelido.getText().toString().length() >= 3) {
                 if (this.etAltura.getText().toString().length() != 0) {
                     if (this.etPeso.getText().toString().length() != 0) {
-
                         try {
                             Double altura = Double.parseDouble(this.etAltura.getText().toString());
                             Double peso = Double.parseDouble(this.etPeso.getText().toString());

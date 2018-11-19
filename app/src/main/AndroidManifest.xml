@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,17 +21,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistoActivity" android:screenOrientation="portrait"
-            android:parentActivityName=".LoginActivity" />
+            android:name=".RegistoActivity"
+            android:parentActivityName=".LoginActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".IndexActivity" android:screenOrientation="portrait"
+            android:name=".IndexActivity"
             android:label="@string/title_activity_index"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <meta-data
             android:name="android.app.default_searchable"
             android:value="com.apkgetter.SearchResultsActivity" />
+
+        <activity android:name=".PopUpExercicio"
+            android:theme="@style/AppTheme.PopUp"></activity>
     </application>
 
 </manifest>

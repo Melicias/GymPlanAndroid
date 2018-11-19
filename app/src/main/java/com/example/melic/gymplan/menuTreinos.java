@@ -232,8 +232,12 @@ public class menuTreinos extends Fragment {
     public void onResume() {
         super.onResume();
         // Set title
-        getActivity().getActionBar()
-                .setTitle("Menu Treino");
+        if(this.escolha == this.MENU){
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Todos os treinos");
+        }else{
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Meus treinos");
+        }
+
     }
     /**
      * This interface must be implemented by activities that contain this

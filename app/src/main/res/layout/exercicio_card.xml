@@ -39,7 +39,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="18dp"
                     android:layout_marginTop="5dp"
-                    android:text="Grossalhão"
+                    android:text="Abdominal hardcore"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
@@ -48,10 +48,18 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvNomeExercicio"
                     android:layout_alignStart="@+id/tvNomeExercicio"
-                    android:layout_marginStart="-5dp"
-                    android:layout_marginTop="33dp"
+                    android:layout_marginStart="20dp"
                     android:text="Duração: 2:00"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
+                <Button
+                    android:id="@+id/btDetalhes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:background="@color/colorAccent"
+                    android:text="Detalhes"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_below="@+id/tvDuracaoRepeticoes"
+                    android:layout_alignParentRight="true" />
 
             </RelativeLayout>
         </LinearLayout>

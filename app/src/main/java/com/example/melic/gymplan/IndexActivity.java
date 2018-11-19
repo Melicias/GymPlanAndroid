@@ -35,7 +35,6 @@ public class IndexActivity extends AppCompatActivity
     Toolbar toolbar;
     boolean first = true;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +50,6 @@ public class IndexActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -98,7 +95,6 @@ public class IndexActivity extends AppCompatActivity
             Bundle bundle = new Bundle();
             bundle.putInt("escolha", menuTreinos.MENU);
             fragment.setArguments(bundle);
-            toolbar.setTitle("Todos os treinos");
             /*if (fragment == null) {
                 fTransaction.add(R.id.content_frame, fragment, "uniqueTag").addToBackStack(null).commit();
             }
@@ -111,7 +107,6 @@ public class IndexActivity extends AppCompatActivity
             Bundle bundle = new Bundle();
             bundle.putInt("escolha", menuTreinos.MEU);
             fragment.setArguments(bundle);
-            toolbar.setTitle("Meus treinos");
         } else if (id == R.id.nav_minhaConta) {
             tag = "minhaConta";
             toolbar.setTitle("Minha treinos");
