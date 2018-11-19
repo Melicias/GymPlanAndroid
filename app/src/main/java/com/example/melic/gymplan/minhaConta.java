@@ -7,16 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link minhaConta.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link minhaConta#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class minhaConta extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,16 +21,14 @@ public class minhaConta extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    EditText etPrimeiroNome,etApelido,etAltura,etPeso;
+    Button btAtualizarDados;
+
     public minhaConta() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment minhaConta.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static minhaConta newInstance() {
         minhaConta fragment = new minhaConta();
@@ -48,17 +41,90 @@ public class minhaConta extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
         }
+
+        this.etPrimeiroNome = (EditText) findViewById(R.id.etPrimeiroNome);
+        this.etApelido = (EditText) findViewById(R.id.etApelido);
+        this.etAltura = (EditText) findViewById(R.id.etAltura);
+        this.etPeso = (EditText) findViewById(R.id.etPeso);
+        this.btAtualizarDados = (Button) findViewById(R.id.btAtualizarDados);
+
+        this.btAtualizarDados.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if(checkValues()){
+
+                        Toast.makeText(getContext(), "Yh Deu", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+        });
+
+    }
+
+    private boolean checkValues() {
+        if (this.etPrimeiroNome.getText().toString().length() >= 3) {
+            if (this.etApelido.getText().toString().length() >= 3) {
+                if (this.etAltura.getText().toString().length() != 0) {
+                    if (this.etPeso.getText().toString().length() != 0) {
+
+                        try {
+                            Double altura = Double.parseDouble(this.etAltura.getText().toString());
+                            Double peso = Double.parseDouble(this.etPeso.getText().toString());
+
+                            String[] splitterAltura = altura.toString().split("\\.");
+                            if (splitterAltura.length >= 2) {
+                                if (splitterAltura[0].length() >= 1 && splitterAltura[1].length() >= 1 && splitterAltura[0].length() <= 2 && splitterAltura[1].length() <= 2) {
+                                    String[] splitterPeso = peso.toString().split("\\.");
+                                    if (splitterPeso.length >= 2) {
+                                        if (splitterPeso[0].length() >= 1 && splitterPeso[1].length() >= 1 && splitterPeso[0].length() <= 3 && splitterPeso[1].length() <= 3) {
+                                            return true;
+                                        } else {
+                                            //numeros errados no peso
+                                        }
+                                    } else {
+                                        //peso so com 1 ou 2
+                                    }
+                                } else {
+                                    //numeros errados na altura
+                                }
+                            } else {
+                                //altura so com 1 ou 2
+                            }
+                        } catch (IllegalArgumentException ex) {
+                            //erro na conversao
+                        }
+                    } else {
+                        //peso null
+                    }
+                } else {
+                    //altura null
+                }
+
+            } else {
+                //ultimo nome null ou menor que 3
+            }
+        } else {
+            //primerio nome null ou menor que 3
+        }
+        return false;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_minha_conta, container, false);
+
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        View content = view.findViewById(R.id.content);
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -83,16 +149,6 @@ public class minhaConta extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

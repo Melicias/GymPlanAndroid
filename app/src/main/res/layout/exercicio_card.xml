@@ -36,27 +36,33 @@
                     android:textColor="@color/colorAccent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="18dp"
                     android:layout_marginTop="5dp"
-                    android:text="Android Name"
-                    android:textAppearance="?android:attr/textAppearanceLarge"/>
+                    android:text="Grossalhão"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
                     android:id="@+id/tvDuracao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Duração: 2:00"
                     android:layout_below="@+id/tvNomeExercicio"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:layout_alignStart="@+id/tvNomeExercicio"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="33dp"
+                    android:text="Duração: 2:00"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
-                    android:id="@+id/tvRepeticoes"
+                    android:id="@+id/tvCategoria"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Repetições: 10"
                     android:layout_below="@+id/tvNomeExercicio"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="109dp"
+                    android:text="Categoria: Abs"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
             </RelativeLayout>
         </LinearLayout>
