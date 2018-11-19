@@ -43,7 +43,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
-                    android:id="@+id/tvDuracao"
+                    android:id="@+id/tvDuracaoRepeticoes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvNomeExercicio"
@@ -51,17 +51,6 @@
                     android:layout_marginStart="-5dp"
                     android:layout_marginTop="33dp"
                     android:text="Duração: 2:00"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/tvCategoria"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvNomeExercicio"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="109dp"
-                    android:text="Categoria: Abs"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
             </RelativeLayout>

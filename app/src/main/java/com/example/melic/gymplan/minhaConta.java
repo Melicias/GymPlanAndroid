@@ -41,25 +41,8 @@ public class minhaConta extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+
         }
-
-        this.etPrimeiroNome = (EditText) findViewById(R.id.etPrimeiroNome);
-        this.etApelido = (EditText) findViewById(R.id.etApelido);
-        this.etAltura = (EditText) findViewById(R.id.etAltura);
-        this.etPeso = (EditText) findViewById(R.id.etPeso);
-        this.btAtualizarDados = (Button) findViewById(R.id.btAtualizarDados);
-
-        this.btAtualizarDados.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if(checkValues()){
-
-                        Toast.makeText(getContext(), "Yh Deu", Toast.LENGTH_LONG).show();
-                    }
-                }
-
-        });
 
     }
 
@@ -116,7 +99,26 @@ public class minhaConta extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_minha_conta, container, false);
+        View view =  inflater.inflate(R.layout.fragment_minha_conta, container, false);
+         this.etPrimeiroNome = (EditText) view.findViewById(R.id.etPrimeiroNome);
+        this.etApelido = (EditText) view.findViewById(R.id.etApelido);
+        this.etAltura = (EditText) view.findViewById(R.id.etAltura);
+        this.etPeso = (EditText) view.findViewById(R.id.etPeso);
+        this.btAtualizarDados = (Button) view.findViewById(R.id.btAtualizarDados);
+
+        this.btAtualizarDados.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if(checkValues()){
+
+                        Toast.makeText(getContext(), "Yh Deu", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+        });
+
+        return view;
 
     }
 
@@ -125,6 +127,7 @@ public class minhaConta extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         View content = view.findViewById(R.id.content);
     }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

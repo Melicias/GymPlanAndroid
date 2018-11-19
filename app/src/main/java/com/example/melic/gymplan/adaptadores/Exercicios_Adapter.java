@@ -47,18 +47,15 @@ public class Exercicios_Adapter extends
 
         TextView Nome = viewHolder.tvNome;
         ImageView Image = viewHolder.image;
-        TextView Repeticoes = viewHolder.tvRepeticoes;
-        TextView Duracao = viewHolder.tvDuracao;
+        TextView DuracaoRepeticoes = viewHolder.tvDuracaoRepeticoes;
 
 
         Nome.setText(exercicio.getNome());
         new DownloadImageTask(Image).execute(exercicio.getFoto());
         if (exercicio.getDuracao() != 0){
-            Duracao.setText("Duração: " + getDurationBreakdown(exercicio.getDuracao()));
-            Repeticoes.setVisibility(View.GONE);
+            DuracaoRepeticoes.setText("Duração: " + getDurationBreakdown(exercicio.getDuracao()));
         }else{
-            Repeticoes.setText("Repetições: " + exercicio.getRepeticoes());
-            Duracao.setVisibility(View.GONE);
+            DuracaoRepeticoes.setText("Repetições: " + exercicio.getRepeticoes());
         }
     }
 
@@ -69,7 +66,7 @@ public class Exercicios_Adapter extends
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvNome, tvRepeticoes, tvDuracao;
+        public TextView tvNome, tvRepeticoes, tvDuracaoRepeticoes;
         public ImageView image;
 
         public ViewHolder(View itemView) {
@@ -77,8 +74,7 @@ public class Exercicios_Adapter extends
             super(itemView);
             tvNome = (TextView) itemView.findViewById(R.id.tvNomeExercicio);
             image = (ImageView) itemView.findViewById(R.id.ivExercicio);
-            tvRepeticoes = (TextView) itemView.findViewById(R.id.tvRepeticoes);
-            tvDuracao = (TextView) itemView.findViewById(R.id.tvDuracao);
+            tvDuracaoRepeticoes = (TextView) itemView.findViewById(R.id.tvDuracaoRepeticoes);
 
         }
     }

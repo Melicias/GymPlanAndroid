@@ -7,6 +7,7 @@ import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -80,6 +81,7 @@ public class menuTreinos extends Fragment {
         if (getArguments() != null) {
             escolha = getArguments().getInt(ARG_PARAM);
         }
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("aaa");
     }
 
     @Override
