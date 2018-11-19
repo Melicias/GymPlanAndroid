@@ -1,6 +1,7 @@
 package com.example.melic.gymplan;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.melic.gymplan.adaptadores.Exercicios_Adapter;
 import com.example.melic.gymplan.classes.Treino;
@@ -29,7 +31,7 @@ public class exerciciosFrag extends Fragment {
 
     // TODO: Rename and change types of parameters
     private Treino treino;
-
+    Button btComecarTreino;
     private OnFragmentInteractionListener mListener;
 
     public exerciciosFrag() {
@@ -51,6 +53,8 @@ public class exerciciosFrag extends Fragment {
         if (getArguments() != null) {
             this.treino = (Treino)getArguments().getSerializable(ARG_PARAM);
         }
+
+
     }
 
     @Override
@@ -65,9 +69,20 @@ public class exerciciosFrag extends Fragment {
         rvExercicios.setAdapter(AdaptadorTreinos);
         rvExercicios.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        this.btComecarTreino = (Button) view.findViewById(R.id.btComecarTreino);
+
+        this.btComecarTreino.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ComecarTreino();
+            }
+        });
         return view;
     }
-
+    public void ComecarTreino() {
+        Intent ComecarTreino = new Intent(getActivity(),TreinoActivity.class);
+        startActivity(ComecarTreino);
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -91,6 +106,7 @@ public class exerciciosFrag extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

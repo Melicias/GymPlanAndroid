@@ -109,7 +109,6 @@ public class IndexActivity extends AppCompatActivity
             fragment.setArguments(bundle);
         } else if (id == R.id.nav_minhaConta) {
             tag = "minhaConta";
-            toolbar.setTitle("Minha treinos");
             fragment = new minhaConta();
         } else if (id == R.id.nav_logout) {
 
