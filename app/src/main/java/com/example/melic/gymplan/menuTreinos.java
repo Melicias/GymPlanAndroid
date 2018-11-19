@@ -231,9 +231,14 @@ public class menuTreinos extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Set title
-        getActivity().getActionBar()
-                .setTitle("Menu Treino");
+        if(MENU==1) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Todos os Planos");
+        }
+        else{
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Meus Planos");
+
+        }
+
     }
     /**
      * This interface must be implemented by activities that contain this
