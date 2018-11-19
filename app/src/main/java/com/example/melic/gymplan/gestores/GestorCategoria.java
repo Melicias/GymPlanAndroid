@@ -2,6 +2,8 @@ package com.example.melic.gymplan.gestores;
 
 import com.example.melic.gymplan.classes.CategoriaTreino;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class GestorCategoria {
