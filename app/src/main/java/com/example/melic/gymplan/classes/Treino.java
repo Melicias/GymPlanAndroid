@@ -45,6 +45,8 @@ public class Treino implements Serializable {
 
     public ArrayList getExercicios(){return exercicios;}
 
+    public Exercicio getExercicio(int i){return exercicios.get(i);}
+
     public void setExercicios(ArrayList<Exercicio> exercicios){this.exercicios = exercicios;}
 
     public void addExercicio(Exercicio exercicio){

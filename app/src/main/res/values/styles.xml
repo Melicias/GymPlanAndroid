@@ -21,7 +21,7 @@
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:textColor">@color/colorAccent</item>
     </style>
-    
+
     <style name="AppTheme.PopUp">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>

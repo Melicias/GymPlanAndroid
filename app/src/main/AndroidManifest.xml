@@ -28,18 +28,19 @@
             android:name=".IndexActivity"
             android:label="@string/title_activity_index"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
             android:theme="@style/AppTheme.NoActionBar" />
-
+        android:theme="@style/AppTheme.NoActionBar" />
         <meta-data
             android:name="android.app.default_searchable"
             android:value="com.apkgetter.SearchResultsActivity" />
-        <activity android:name=".PopUpExercicio"
-            android:theme="@style/AppTheme.PopUp"></activity>
+
+        <activity
+            android:name=".PopUpExercicio"
+            android:theme="@style/AppTheme.PopUp" />
         <activity
             android:name=".TreinoActivity"
             android:label="@string/title_activity_treino"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
