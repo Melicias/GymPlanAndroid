@@ -4,10 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.melic.gymplan.classes.DownloadImageTask;
 import com.example.melic.gymplan.classes.Exercicio;
 
 
@@ -25,7 +29,7 @@ public class exercicioFrag extends Fragment {
     public static final String ARG_PARAM = "exercicio";
 
     // TODO: Rename and change types of parameters
-    private Exercicio mParam;
+    private Exercicio exercicio;
 
     private OnFragmentInteractionListener mListener;
 
@@ -53,7 +57,7 @@ public class exercicioFrag extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam = (Exercicio)getArguments().getSerializable(ARG_PARAM);
+            exercicio = (Exercicio)getArguments().getSerializable(ARG_PARAM);
         }
     }
 
@@ -61,7 +65,40 @@ public class exercicioFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_exercicio, container, false);
+        View view = inflater.inflate(R.layout.fragment_exercicio, container, false);
+        TextView tvNome,tvDescricao,tvDuracaoRepeticoes;
+        ImageView ivFoto;
+
+        tvNome = (TextView) view.findViewById(R.id.tvNome);
+        tvDescricao = (TextView) view.findViewById(R.id.tvDescricao);
+        tvDuracaoRepeticoes = (TextView) view.findViewById(R.id.tvDuracaoRepeticoes);
+        ivFoto = (ImageView) view.findViewById(R.id.ivExercicio);
+        tvDescricao.setMovementMethod(new ScrollingMovementMethod());
+
+        tvNome.setText(exercicio.getNome());
+        tvDescricao.setText(exercicio.getDescricao());
+        if (exercicio.getDuracao() != 0){
+            tvDuracaoRepeticoes.setText("Duração: " + getDurationBreakdown(exercicio.getDuracao()));
+        }else{
+            tvDuracaoRepeticoes.setText("Repetições: " + exercicio.getRepeticoes());
+        }
+        new DownloadImageTask(ivFoto).execute(exercicio.getFoto());
+
+        return view;
+    }
+
+    public static String getDurationBreakdown(int millis)
+    {
+        int mins = millis / 60;
+        int remainder = millis - mins * 60;
+        int secs = remainder;
+
+        /*StringBuilder sb = new StringBuilder(64);
+        sb.append(mins);
+        sb.append(":");
+        sb.append(secs);
+        return(sb.toString());*/
+        return String.format("%02d:%02d",mins,secs);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

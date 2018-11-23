@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.melic.gymplan.R;
@@ -65,6 +66,7 @@ public class Treinos_Adapter extends
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvNome,tvCategoria,tvDificuldade,tvRepeticoes,tvNumeroExercicios;
+        public ImageButton ibSave;
 
 
         public ViewHolder(View itemView) {
@@ -75,6 +77,14 @@ public class Treinos_Adapter extends
             tvDificuldade = (TextView) itemView.findViewById(R.id.tvDificuldade);
             tvRepeticoes = (TextView) itemView.findViewById(R.id.tvRepeticoes);
             tvNumeroExercicios = (TextView) itemView.findViewById(R.id.tvNumeroExercicios);
+            ibSave = (ImageButton) itemView.findViewById(R.id.ibSave);
+
+            ibSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //para guardar nos meus treinos
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
