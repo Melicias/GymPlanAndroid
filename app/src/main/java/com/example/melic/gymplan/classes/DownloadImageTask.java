@@ -17,6 +17,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     public DownloadImageTask(ImageView bmImage) {
         this.bmImage = bmImage;
+        this.bmImage.setImageResource(R.drawable.loading);
     }
 
     protected Bitmap doInBackground(String... urls) {

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.melic.gymplan.classes.DownloadImageTask;
 import com.example.melic.gymplan.classes.Exercicio;
+import com.squareup.picasso.Picasso;
 
 public class PopUpExercicio extends Activity {
 
@@ -44,7 +45,8 @@ public class PopUpExercicio extends Activity {
         }else{
             tvDuracaoRepeticoes.setText("Repetições: " + exercicio.getRepeticoes());
         }
-        new DownloadImageTask(ivFoto).execute(exercicio.getFoto());
+        //new DownloadImageTask(ivFoto).execute(exercicio.getFoto());
+        Picasso.get().load(exercicio.getFoto()).placeholder(R.drawable.loading).error(R.drawable.image_not_available).into(ivFoto);
     }
 
     public static String getDurationBreakdown(int millis)

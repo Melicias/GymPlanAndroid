@@ -1,18 +1,22 @@
 package com.example.melic.gymplan;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.melic.gymplan.classes.DownloadImageTask;
 import com.example.melic.gymplan.classes.Exercicio;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -30,6 +34,10 @@ public class exercicioFrag extends Fragment {
 
     // TODO: Rename and change types of parameters
     private Exercicio exercicio;
+    private CountDownTimer cdt;
+    private long timeProgress;
+    private TextView tvDuracaoRepeticoes;
+    private Button btComecar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,23 +74,53 @@ public class exercicioFrag extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_exercicio, container, false);
-        TextView tvNome,tvDescricao,tvDuracaoRepeticoes;
+        final TextView tvNome,tvDescricao;
         ImageView ivFoto;
 
         tvNome = (TextView) view.findViewById(R.id.tvNome);
         tvDescricao = (TextView) view.findViewById(R.id.tvDescricao);
         tvDuracaoRepeticoes = (TextView) view.findViewById(R.id.tvDuracaoRepeticoes);
         ivFoto = (ImageView) view.findViewById(R.id.ivExercicio);
+        btComecar = view.findViewById(R.id.btComecar);
         tvDescricao.setMovementMethod(new ScrollingMovementMethod());
 
         tvNome.setText(exercicio.getNome());
         tvDescricao.setText(exercicio.getDescricao());
         if (exercicio.getDuracao() != 0){
             tvDuracaoRepeticoes.setText("Duração: " + getDurationBreakdown(exercicio.getDuracao()));
+            timeProgress = this.exercicio.getDuracao()*1000;
         }else{
             tvDuracaoRepeticoes.setText("Repetições: " + exercicio.getRepeticoes());
+            tvDuracaoRepeticoes.setTextColor(Color.parseColor("#5e0000"));
+            btComecar.setVisibility(View.GONE);
         }
-        new DownloadImageTask(ivFoto).execute(exercicio.getFoto());
+        //new DownloadImageTask(ivFoto).execute(exercicio.getFoto());
+        Picasso.get().load(exercicio.getFoto()).placeholder(R.drawable.loading).error(R.drawable.image_not_available).into(ivFoto);
+
+        btComecar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(btComecar.getText().toString().equals("Pausar")){
+                    cdt.cancel();
+                    btComecar.setText("Começar");
+                }else{
+                    cdt = new CountDownTimer(timeProgress,1000) {
+                        @Override
+                        public void onTick(long l) {
+                            tvDuracaoRepeticoes.setText(l/1000 + "s");
+                            timeProgress = l;
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            tvDuracaoRepeticoes.setText("Feito!");
+                        }
+                    };
+                    cdt.start();
+                    btComecar.setText("Pausar");
+                }
+            }
+        });
 
         return view;
     }
@@ -116,6 +154,36 @@ public class exercicioFrag extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (exercicio.getDuracao() != 0){
+            if(cdt != null){
+                cdt.cancel();
+                btComecar.setText("Pausar");
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (exercicio.getDuracao() != 0){
+            if(cdt != null){
+                cdt.cancel();
+                btComecar.setText("Pausar");
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (exercicio.getDuracao() != 0){
+
         }
     }
 

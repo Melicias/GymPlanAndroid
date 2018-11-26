@@ -17,6 +17,7 @@ import com.example.melic.gymplan.PopUpExercicio;
 import com.example.melic.gymplan.R;
 import com.example.melic.gymplan.classes.DownloadImageTask;
 import com.example.melic.gymplan.classes.Exercicio;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +56,8 @@ public class Exercicios_Adapter extends
         TextView DuracaoRepeticoes = viewHolder.tvDuracaoRepeticoes;
 
         Nome.setText(exercicio.getNome());
-        new DownloadImageTask(Image).execute(exercicio.getFoto());
+        //new DownloadImageTask(Image).execute(exercicio.getFoto());
+        Picasso.get().load(exercicio.getFoto()).placeholder(R.drawable.loading).error(R.drawable.image_not_available).into(Image);
         if (exercicio.getDuracao() != 0){
             DuracaoRepeticoes.setText("Duração: " + getDurationBreakdown(exercicio.getDuracao()));
         }else{
