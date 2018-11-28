@@ -20,7 +20,7 @@ public class GestorExercicio {
     }
 
     private void adicionarDados(){
-        String url = "http://www.spekeapartments.com/sites/default/files/styles/my_lightbox/public/gallery/gym8.jpg?itok=WhjbWtUA";
+        String url = "https://revistashape.com.br/wp-content/uploads/2017/07/abdominal-cl%C3%A1ssica.jpg";
         this.exercicios.add(new Exercicio(1,url,"Abs", "descricao123",12,true));
         this.exercicios.add(new Exercicio(2,url,"Abs2","descricao123",12,true));
         String urlPeito = "https://dicasdemusculacao.org/wp-content/uploads/Treino-peito.jpg";
