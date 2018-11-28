@@ -31,6 +31,8 @@ public class Exercicios_Adapter extends
         this.exercicios = exercicios;
     }
 
+        //The Adapter is responsible for making a View for each item in the data set.
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

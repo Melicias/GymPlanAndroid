@@ -1,6 +1,7 @@
 package com.example.melic.gymplan;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,7 @@ public class minhaConta extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
 
         }
@@ -110,12 +112,10 @@ public class minhaConta extends Fragment {
 
             @Override
             public void onClick(View view) {
-                if(checkValues()){
-
-                        Toast.makeText(getContext(), "Yh Deu", Toast.LENGTH_LONG).show();
-                    }
+                Toast.makeText(getContext(), "Informação Atualizada com Sucesso", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getContext(), IndexActivity.class);
+                startActivity(i);
                 }
-
         });
 
         return view;
@@ -158,6 +158,8 @@ public class minhaConta extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Minha Conta");
 
     }
+
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

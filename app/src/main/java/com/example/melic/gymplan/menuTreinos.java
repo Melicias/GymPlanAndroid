@@ -20,15 +20,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.melic.gymplan.adaptadores.Treinos_Adapter;
-import com.example.melic.gymplan.classes.CategoriaTreino;
-import com.example.melic.gymplan.classes.DificuldadeTreino;
 import com.example.melic.gymplan.classes.Treino;
 import com.example.melic.gymplan.gestores.GestorCategoria;
 import com.example.melic.gymplan.gestores.GestorDificuldade;
 import com.example.melic.gymplan.gestores.GestorTreino;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 
 /**
