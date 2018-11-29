@@ -21,8 +21,14 @@ public class GestorDificuldade {
     private void adicionarDados(){
         this.dificuldades.add(new DificuldadeTreino(1,1));
         this.dificuldades.add(new DificuldadeTreino(2,2));
-        this.dificuldades.add(new DificuldadeTreino(3,4));
-        this.dificuldades.add(new DificuldadeTreino(4,5));
+        this.dificuldades.add(new DificuldadeTreino(3,3));
+        this.dificuldades.add(new DificuldadeTreino(4,4));
+        this.dificuldades.add(new DificuldadeTreino(5,5));
+        this.dificuldades.add(new DificuldadeTreino(6,6));
+        this.dificuldades.add(new DificuldadeTreino(7,7));
+        this.dificuldades.add(new DificuldadeTreino(8,8));
+        this.dificuldades.add(new DificuldadeTreino(9,9));
+        this.dificuldades.add(new DificuldadeTreino(10,10));
     }
 
     public ArrayList<DificuldadeTreino> getDificuldades(){

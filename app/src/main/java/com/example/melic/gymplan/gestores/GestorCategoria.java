@@ -1,5 +1,7 @@
 package com.example.melic.gymplan.gestores;
 
+import android.util.Log;
+
 import com.example.melic.gymplan.classes.CategoriaTreino;
 
 import java.io.BufferedReader;
@@ -20,10 +22,11 @@ public class GestorCategoria {
     }
 
     private void adicionarDados(){
-        this.categorias.add(new CategoriaTreino(1,"abs"));
-        this.categorias.add(new CategoriaTreino(2,"pernas"));
-        this.categorias.add(new CategoriaTreino(3,"bracos"));
-        this.categorias.add(new CategoriaTreino(4,"costas"));
+        this.categorias.add(new CategoriaTreino(1,"Perder Peso"));
+        this.categorias.add(new CategoriaTreino(2,"Ganhar massa"));
+        this.categorias.add(new CategoriaTreino(3,"Queimar gordura"));
+        this.categorias.add(new CategoriaTreino(4,"Cardio"));
+        this.categorias.add(new CategoriaTreino(5,"Manter"));
     }
 
     public ArrayList<CategoriaTreino> getCategorias(){

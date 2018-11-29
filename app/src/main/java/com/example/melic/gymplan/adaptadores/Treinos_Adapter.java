@@ -22,9 +22,11 @@ import java.util.ArrayList;
 public class Treinos_Adapter extends
         RecyclerView.Adapter<Treinos_Adapter.ViewHolder> {
     private ArrayList<Treino> treinos;
+    private ArrayList<Treino> treinosNew;
     private Context context;
     public Treinos_Adapter(ArrayList<Treino> treinos) {
         this.treinos = treinos;
+        this.treinosNew = treinos;
     }
 
 
@@ -58,6 +60,48 @@ public class Treinos_Adapter extends
         NumeroExercicios.setText("" + treino.getExercicios().size());
 
     }
+
+
+    public void pesquisaTudo(String nome,int idDificuldade, int idCategoria){
+        this.treinos = (ArrayList<Treino>)treinosNew.clone();
+        for(int i = 0;i<this.treinos.size();i++){
+            if(!treinos.get(i).getNome().contains(nome)){
+                treinos.remove(i);
+                i--;
+            }
+        }
+        if(idDificuldade != -1){
+            for(int i = 0;i<this.treinos.size();i++){
+                if(treinos.get(i).getDificuldade().getId() != idDificuldade){
+                    treinos.remove(i);
+                    i--;
+                }
+            }
+        }
+        if(idCategoria != -1){
+            for(int i = 0;i<this.treinos.size();i++){
+                if(treinos.get(i).getCategoria().getId() != idCategoria){
+                    treinos.remove(i);
+                    i--;
+                }
+            }
+        }
+    }
+
+    public void pesquisaNome(String nome){
+
+    }
+
+    public void pesquisaDificuldade(int idCategoria){
+        this.treinos = this.treinosNew;
+
+    }
+
+    public void pesquisaCategoria(int idCategoria){
+        this.treinos = this.treinosNew;
+
+    }
+
     @Override
     public int getItemCount() {
         return treinos.size();

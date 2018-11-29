@@ -20,15 +20,13 @@ public class GestorExercicio {
     }
 
     private void adicionarDados(){
-        String url = "https://revistashape.com.br/wp-content/uploads/2017/07/abdominal-cl%C3%A1ssica.jpg";
-        this.exercicios.add(new Exercicio(1,url,"Abs", "descricao123",12,true));
-        this.exercicios.add(new Exercicio(2,url,"Abs2","descricao123",12,true));
-        String urlPeito = "https://dicasdemusculacao.org/wp-content/uploads/Treino-peito.jpg";
-        this.exercicios.add(new Exercicio(1,url,"Abs6","descricao123",12,true));
-        this.exercicios.add(new Exercicio(2,urlPeito,"Peito","descricao123",12,true));
-        this.exercicios.add(new Exercicio(3,url,"Abs3","descricao123",12,true));
-        this.exercicios.add(new Exercicio(4,url,"Abs4","descricao123",66,false));
-        this.exercicios.add(new Exercicio(5,url,"Abs5","descricao123",12,true));
+        this.exercicios.add(new Exercicio(1,"https://revistashape.com.br/wp-content/uploads/2017/07/abdominal-cl%C3%A1ssica.jpg","Abdominal", "descricao123descrica o123descricao123desc ricao123descricao123descricao123descricao123 descricao123descricao123descricao123",20,true));
+        this.exercicios.add(new Exercicio(2,"https://nit.pt/wp-content/uploads/2016/10/93cf40e8-6d65-43ed-aea8-f6e119cfd207-754x394.jpg","Saltar a corda","Saltar a corda e muito doloroso pimbas",480,false));
+        this.exercicios.add(new Exercicio(3,"https://upload.wikimedia.org/wikipedia/commons/8/84/Muscleup.jpg","Aquele exercicio","Exte e um exercicio que ninguem sabia que existia",12,true));
+        this.exercicios.add(new Exercicio(4,"https://cdn2.coachmag.co.uk/sites/coachmag/files/2017/05/bench-press_0.jpg","Peito","dalhe com a maquina",24,true));
+        this.exercicios.add(new Exercicio(5,"https://weighttraining.guide/wp-content/uploads/2017/07/diamond-push-up-1.png","Push ups diamond","Forca estas quase a acabar, cuidado com a forma como o fazes",10,true));
+        this.exercicios.add(new Exercicio(6,"https://i.ytimg.com/vi/_l3ySVKYVJ8/maxresdefault.jpg","Flexoes","BORA BORA, falta pouco",20,true));
+        this.exercicios.add(new Exercicio(7,"https://images.vidaativa.pt/repo/abdominal-tesoura.jpg","Abdominal infernal","Agora para acabar vem o exercicio mais dificil",120,false));
     }
 
     public ArrayList<Exercicio> getExercicios(){

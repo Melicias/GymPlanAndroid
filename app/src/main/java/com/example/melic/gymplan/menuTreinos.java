@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.melic.gymplan.adaptadores.Treinos_Adapter;
+import com.example.melic.gymplan.classes.CategoriaTreino;
+import com.example.melic.gymplan.classes.DificuldadeTreino;
 import com.example.melic.gymplan.classes.Treino;
 import com.example.melic.gymplan.gestores.GestorCategoria;
 import com.example.melic.gymplan.gestores.GestorDificuldade;
@@ -52,6 +54,8 @@ public class menuTreinos extends Fragment {
 
     // TODO: Rename and change types of parameters
     private int escolha;
+    private Spinner spDificuldade;
+    private Spinner spCategoria;
 
 
     private OnFragmentInteractionListener mListener;
@@ -120,11 +124,11 @@ public class menuTreinos extends Fragment {
                 });
             }
         }else{
-            Treinos_Adapter AdaptadorTreinos = new Treinos_Adapter(treinos);
+            final Treinos_Adapter AdaptadorTreinos = new Treinos_Adapter(treinos);
             rvTreinos.setAdapter(AdaptadorTreinos);
             rvTreinos.setLayoutManager(new LinearLayoutManager(getContext()));
 
-            GestorCategoria gc = new GestorCategoria();
+            final GestorCategoria gc = new GestorCategoria();
             ArrayAdapter<String> spinnerArrayAdapterCategoria = new ArrayAdapter<String>(
                     getContext(),R.layout.spinner_item,gc.getCategoriasString()){
                 @Override
@@ -146,42 +150,7 @@ public class menuTreinos extends Fragment {
                     return view;
                 }
             };
-            Spinner spCategoria =(Spinner)view.findViewById(R.id.spCategorias);
-            spinnerArrayAdapterCategoria.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-            spCategoria.setAdapter(spinnerArrayAdapterCategoria);
-            spCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    if (position == 0) {
-                        // No filter implemented we return all the list
-
-                    }
-                    if(position == 2) {
-                        Toast.makeText(getContext(), "Abdominais", Toast.LENGTH_LONG).show();
-
-                    }
-                    if(position == 3) {
-                        Toast.makeText(getContext(), "Pernas", Toast.LENGTH_LONG).show();
-
-                    }
-                    if(position == 4) {
-                        Toast.makeText(getContext(), "Braços", Toast.LENGTH_LONG).show();
-
-                    }
-                    if(position == 5) {
-                        Toast.makeText(getContext(), "Braços", Toast.LENGTH_LONG).show();
-
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-
-            GestorDificuldade gd = new GestorDificuldade();
+            final GestorDificuldade gd = new GestorDificuldade();
             ArrayAdapter<String> spinnerArrayAdapterDificuldade = new ArrayAdapter<String>(
                     getContext(),R.layout.spinner_item,gd.getDificuldadesString()){
                 @Override
@@ -203,16 +172,55 @@ public class menuTreinos extends Fragment {
                     return view;
                 }
             };
-            Spinner spDificuldade =(Spinner)view.findViewById(R.id.spDificuldade);
+
+            this.spCategoria =(Spinner)view.findViewById(R.id.spCategorias);
+            spinnerArrayAdapterCategoria.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            spCategoria.setAdapter(spinnerArrayAdapterCategoria);
+            spCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    int idDificuldade = spDificuldade.getSelectedItemPosition();
+                    if(idDificuldade == 0 || idDificuldade == 1){
+                        idDificuldade = -1;
+                    }else{
+                        idDificuldade -=2;
+                        idDificuldade = gd.getDificuldade(idDificuldade).getId();
+                    }
+
+                    if(position == 0 || position == 1){
+                        AdaptadorTreinos.pesquisaTudo("",idDificuldade ,-1);
+                    }else{
+                        AdaptadorTreinos.pesquisaTudo("",idDificuldade ,gc.getCategoria((position-2)).getId());
+                    }
+                    AdaptadorTreinos.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+            this.spDificuldade =(Spinner)view.findViewById(R.id.spDificuldade);
             spinnerArrayAdapterDificuldade.setDropDownViewResource(R.layout.spinner_item);
             spDificuldade.setAdapter(spinnerArrayAdapterDificuldade);
             spDificuldade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(position > 1){
-                        // position 0 and 1 with shit, so need to add 2 for this to work
-
+                    int idCategoria = spCategoria.getSelectedItemPosition();
+                    if(idCategoria == 0 || idCategoria == 1){
+                        idCategoria = -1;
+                    }else{
+                        idCategoria -=2;
+                        idCategoria = gc.getCategoria(idCategoria).getId();
                     }
+
+                    if(position == 0 || position == 1){
+                        AdaptadorTreinos.pesquisaTudo("" , -1,idCategoria);
+                    }else{
+                        AdaptadorTreinos.pesquisaTudo("" , gd.getDificuldade((position-2)).getId(),idCategoria);
+                    }
+                    AdaptadorTreinos.notifyDataSetChanged();
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {

@@ -18,7 +18,7 @@ import com.rd.PageIndicatorView;
 import me.relex.circleindicator.CircleIndicator;
 
 
-public class TreinoActivity extends AppCompatActivity  implements exercicioFrag.OnFragmentInteractionListener{
+public class TreinoActivity extends AppCompatActivity  implements exercicioFrag.OnFragmentInteractionListener, FinalExericioFrag.OnFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -102,13 +102,15 @@ public class TreinoActivity extends AppCompatActivity  implements exercicioFrag.
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            if(treino.getExercicios().size() == position)
+                return FinalExericioFrag.newInstance();
             return exercicioFrag.newInstance(treino.getExercicio(position));
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return treino.getExercicios().size();
+            return treino.getExercicios().size()+1;
         }
 
     }
