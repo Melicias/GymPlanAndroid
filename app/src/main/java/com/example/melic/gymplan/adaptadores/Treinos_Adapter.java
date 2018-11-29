@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.melic.gymplan.R;
 import com.example.melic.gymplan.classes.Treino;
 import com.example.melic.gymplan.exerciciosFrag;
+import com.example.melic.gymplan.menuTreinos;
 
 import java.util.ArrayList;
 
@@ -24,9 +25,12 @@ public class Treinos_Adapter extends
     private ArrayList<Treino> treinos;
     private ArrayList<Treino> treinosNew;
     private Context context;
-    public Treinos_Adapter(ArrayList<Treino> treinos) {
+    private int escolha;
+
+    public Treinos_Adapter(ArrayList<Treino> treinos, int escolha) {
         this.treinos = treinos;
         this.treinosNew = treinos;
+        this.escolha = escolha;
     }
 
 
@@ -52,12 +56,20 @@ public class Treinos_Adapter extends
         TextView Dificuldade = viewHolder.tvDificuldade;
         TextView Repeticoes = viewHolder.tvRepeticoes;
         TextView NumeroExercicios = viewHolder.tvNumeroExercicios;
+        ImageButton ibSave = viewHolder.ibSave;
+        ImageButton ibRemover = viewHolder.ibRemove;
 
         Nome.setText(treino.getNome());
         Categoria.setText(treino.getCategoria().getNome());
         Dificuldade.setText("" + treino.getDificuldade().getDificuldade());
         Repeticoes.setText("" +treino.getRepeticoes());
         NumeroExercicios.setText("" + treino.getExercicios().size());
+
+        if(escolha == menuTreinos.MENU){
+            ibSave.setVisibility(View.VISIBLE);
+        }else{
+            ibRemover.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -110,7 +122,7 @@ public class Treinos_Adapter extends
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvNome,tvCategoria,tvDificuldade,tvRepeticoes,tvNumeroExercicios;
-        public ImageButton ibSave;
+        public ImageButton ibSave, ibRemove;
 
 
         public ViewHolder(View itemView) {
@@ -122,8 +134,16 @@ public class Treinos_Adapter extends
             tvRepeticoes = (TextView) itemView.findViewById(R.id.tvRepeticoes);
             tvNumeroExercicios = (TextView) itemView.findViewById(R.id.tvNumeroExercicios);
             ibSave = (ImageButton) itemView.findViewById(R.id.ibSave);
+            ibRemove = (ImageButton) itemView.findViewById(R.id.ibRemove);
 
             ibSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //para guardar nos meus treinos
+                }
+            });
+
+            ibRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //para guardar nos meus treinos

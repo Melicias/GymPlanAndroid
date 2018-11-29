@@ -11,12 +11,22 @@ public class GestorExercicio {
     * int id, String foto, String nome, String descricao, int repeticoes, int duracao
     * int id, String foto, String nome, String descricao, int repeticoes_duracao, boolean repeticoes
      */
+    public static final int TESTE = 0;
+    public static final int ONLINE = 1;
+    public static final int OFFLINE = 2;
 
     private ArrayList<Exercicio> exercicios;
 
-    public GestorExercicio(){
-        this.exercicios = new ArrayList<>();
-        adicionarDados();
+    public GestorExercicio(int escolha){
+        if(escolha == ONLINE){
+            //buscar api
+        }else{
+            //buscar a base de dados
+        }
+        if(escolha == 0) {
+            this.exercicios = new ArrayList<>();
+            adicionarDados();
+        }
     }
 
     private void adicionarDados(){

@@ -10,12 +10,22 @@ public class GestorDificuldade {
      * DificuldadeTreino
      * int id, int dificuldade
      */
+    public static final int TESTE = 0;
+    public static final int ONLINE = 1;
+    public static final int OFFLINE = 2;
 
     private ArrayList<DificuldadeTreino> dificuldades;
 
-    public GestorDificuldade(){
-        this.dificuldades = new ArrayList<>();
-        adicionarDados();
+    public GestorDificuldade(int escolha){
+        if(escolha == ONLINE){
+            //buscar api
+        }else{
+            //buscar a base de dados
+        }
+        if(escolha == 0){
+            this.dificuldades = new ArrayList<>();
+            adicionarDados();
+        }
     }
 
     private void adicionarDados(){
@@ -42,7 +52,7 @@ public class GestorDificuldade {
     public ArrayList<String> getDificuldadesString(){
         ArrayList<String> sdificuldades = new ArrayList<>();
         sdificuldades.add("Dificuldade");
-        sdificuldades.add("Nenhuma");
+        sdificuldades.add("Todas");
         for (int i = 0;i<this.dificuldades.size();i++){
             sdificuldades.add(this.dificuldades.get(i).getDificuldade() + "");
         }

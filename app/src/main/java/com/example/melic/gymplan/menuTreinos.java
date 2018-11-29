@@ -98,11 +98,11 @@ public class menuTreinos extends Fragment {
         // Initialize contacts
         if(this.escolha == MENU){
             //menu option
-            GestorTreino gt = new GestorTreino();
+            GestorTreino gt = new GestorTreino(0);
             this.treinos = gt.getTreinos();
         }else{
             //meus treinos option
-            GestorTreino gt = new GestorTreino();
+            GestorTreino gt = new GestorTreino(0);
             this.treinos = gt.getTreinos();
         }
 
@@ -124,11 +124,11 @@ public class menuTreinos extends Fragment {
                 });
             }
         }else{
-            final Treinos_Adapter AdaptadorTreinos = new Treinos_Adapter(treinos);
+            final Treinos_Adapter AdaptadorTreinos = new Treinos_Adapter(treinos, escolha);
             rvTreinos.setAdapter(AdaptadorTreinos);
             rvTreinos.setLayoutManager(new LinearLayoutManager(getContext()));
 
-            final GestorCategoria gc = new GestorCategoria();
+            final GestorCategoria gc = new GestorCategoria(0);
             ArrayAdapter<String> spinnerArrayAdapterCategoria = new ArrayAdapter<String>(
                     getContext(),R.layout.spinner_item,gc.getCategoriasString()){
                 @Override
@@ -150,7 +150,7 @@ public class menuTreinos extends Fragment {
                     return view;
                 }
             };
-            final GestorDificuldade gd = new GestorDificuldade();
+            final GestorDificuldade gd = new GestorDificuldade(0);
             ArrayAdapter<String> spinnerArrayAdapterDificuldade = new ArrayAdapter<String>(
                     getContext(),R.layout.spinner_item,gd.getDificuldadesString()){
                 @Override
