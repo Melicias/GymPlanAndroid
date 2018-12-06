@@ -19,6 +19,7 @@ public class GestorCategoria {
     private ArrayList<CategoriaTreino> categorias;
 
     public GestorCategoria(int escolha){
+        this.categorias = new ArrayList<>();
         if(escolha == ONLINE){
             //buscar api
         }else{
