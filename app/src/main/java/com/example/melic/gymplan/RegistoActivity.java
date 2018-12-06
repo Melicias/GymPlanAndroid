@@ -1,6 +1,7 @@
 package com.example.melic.gymplan;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +11,23 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class RegistoActivity extends AppCompatActivity {
 
@@ -43,18 +58,58 @@ public class RegistoActivity extends AppCompatActivity {
         //calendario com a data de nascimento
         myCalendar = Calendar.getInstance();
 
-
-
         this.btRegistar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(checkValues()){
                     if(!emailExists()){
-                        //verificacao de data
-                        Toast.makeText(RegistoActivity.this, "Yh Deu", Toast.LENGTH_LONG).show();
+                        try {
+                            String URL = "";
+                            JSONObject jsonBody = new JSONObject();
+
+                            jsonBody.put("primeiroNome", etPrimeiroNome);
+                            jsonBody.put("ultimoNome", etUltimoNome);
+                            jsonBody.put("email", etEmail);
+                            jsonBody.put("data", etData);
+                            jsonBody.put("peso", etPeso);
+                            jsonBody.put("altura", etAltura);
+                            jsonBody.put("password", etPassword);
+                            jsonBody.put("repeatPassword", etPasswordRepetida);
+                            jsonBody.put("sexo", getSexo());
+
+
+
+                            JsonObjectRequest jsonObject = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
+                                public void onResponse(JSONObject response) {
+
+                                    Toast.makeText(getApplicationContext(), "Response:  " + response.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }, new Response.ErrorListener() {
+
+                                public void onErrorResponse(VolleyError error) {
+
+                                    onBackPressed();
+
+                                }
+                            }) {
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    final Map<String, String> headers = new HashMap<>();
+                                    headers.put("Authorization", "Basic " + "c2FnYXJAa2FydHBheS5jb206cnMwM2UxQUp5RnQzNkQ5NDBxbjNmUDgzNVE3STAyNzI=");//put your token here
+                                    return headers;
+                                }
+                            };
+                            RequestQueue requestQueue = Volley.newRequestQueue(this.context);
+                            requestQueue.add(context);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_LONG).show();
+
                     }
                 }
             }
+
         });
 
         this.rbMasculino.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +159,12 @@ public class RegistoActivity extends AppCompatActivity {
         this.etData.setText(sdf.format(myCalendar.getTime()));
     }
 
-
+    private int getSexo(){
+        if(rbFeminino.isChecked()){
+            return 1;
+        }
+        return 0;
+    }
     private boolean checkValues(){
         if(this.etPrimeiroNome.getText().toString().length() >= 3){
             if(this.etUltimoNome.getText().toString().length() >= 3){
@@ -127,53 +187,53 @@ public class RegistoActivity extends AppCompatActivity {
                                                             if(splitterPeso[0].length() >= 1 && splitterPeso[1].length() >= 1 && splitterPeso[0].length() <= 3 && splitterPeso[1].length() <= 3){
                                                                 return true;
                                                             }else{
-                                                                //numeros errados no peso
+                                                                Toast.makeText(getApplicationContext(), "peso insuficiente", Toast.LENGTH_LONG).show();
+
                                                             }
                                                         }else{
-                                                            //peso so com 1 ou 2
+                                                            Toast.makeText(getApplicationContext(), "peso só com 1 ou 2", Toast.LENGTH_LONG).show();
                                                         }
                                                     }else{
-                                                        //numeros errados na altura
+                                                        Toast.makeText(getApplicationContext(), "numeros errados na altura", Toast.LENGTH_LONG).show();
                                                     }
                                                 }else{
-                                                    //altura so com 1 ou 2
+                                                    Toast.makeText(getApplicationContext(), "altura só com 1 ou 2", Toast.LENGTH_LONG).show();
                                                 }
                                             }catch(IllegalArgumentException ex){
-                                                //erro na conversao
+                                                Toast.makeText(getApplicationContext(), "Erro de conversão", Toast.LENGTH_LONG).show();
                                             }
                                         }else{
-                                            //password errada
+                                            Toast.makeText(getApplicationContext(), "Password errada", Toast.LENGTH_LONG).show();
                                         }
                                     }else{
-                                        //pessoa demasiado nova DATA
+                                        Toast.makeText(getApplicationContext(), "Idade insuficiente", Toast.LENGTH_LONG).show();
                                     }
                                 }else{
-                                    //password menor que 3
+                                    Toast.makeText(getApplicationContext(), "Password demasiado fraca, insira uma password com mais de 3 carateres", Toast.LENGTH_LONG).show();
                                 }
                             }else{
-                                //peso null
+                                Toast.makeText(getApplicationContext(), "Insira o seu peso", Toast.LENGTH_LONG).show();
                             }
                         }else{
-                            //altura null
+                            Toast.makeText(getApplicationContext(), "Insira a sua altura", Toast.LENGTH_LONG).show();
                         }
                     }else{
-                        //data null
+                        Toast.makeText(getApplicationContext(), "Insira a sua data de Nascimento", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    //email null ou invalido
+                    Toast.makeText(getApplicationContext(), "Por favor insira um e-mail válido", Toast.LENGTH_LONG).show();
                 }
             }else{
-                //ultimo nome null ou menor que 3
+                Toast.makeText(getApplicationContext(), "Apelido demasiado pequeno", Toast.LENGTH_LONG).show();
             }
         }else{
-            //primerio nome null ou menor que 3
+            Toast.makeText(getApplicationContext(), "Nome demasiado pequeno", Toast.LENGTH_LONG).show();
         }
         return false;
     }
 
     private boolean emailExists(){
-
-        //codigo para verificar a existencia do email
+        
         return false;
     }
 
