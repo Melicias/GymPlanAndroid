@@ -7,12 +7,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.melic.gymplan.classes.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
 
     Button btLogin;
     TextView tvRegistar;
     EditText etEmail, etPassword;
+
+    private static String URL = "https://gymplanyii.000webhostapp.com/GymPlanYii/api/web/user/login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         this.btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if (checkValues()) {
-                    //if (emailExists()) {
-                        //if (login()) {
-                            Registo();
-                        //}
-                    //}
-                //}
+                if (checkValues()) {
+                    efetuarLogin(etEmail.getText().toString(),etPassword.getText().toString());
+                }
             }
         });
     }
@@ -53,25 +67,58 @@ public class LoginActivity extends AppCompatActivity {
                 //dados inseridos
                 return true;
             } else {
-                //password e null
+                Toast.makeText(this, "A password está vazia", Toast.LENGTH_SHORT).show();
             }
         } else {
-            //email invalido ou null
+            Toast.makeText(this, "O email está vazio ou é inválido", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
 
-    public boolean emailExists() {
-        //check on db if email exists
-        return true;
-    }
-    public void Registo() {
-        Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
-        startActivity(Index);
-    }
+    public void efetuarLogin(String email, String password) {
 
-    public boolean login() {
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("email", email);
+            jsonBody.put("password", password);
 
-        return true;
+            JsonObjectRequest jsonObject = new JsonObjectRequest(
+                    Request.Method.POST,
+                    URL,
+                    jsonBody,
+                    new Response.Listener<JSONObject>() {
+                        public void onResponse(JSONObject response) {
+                            //save num file do user
+                            if(!response.isNull("primeiroNome")){
+                                try {
+                                    SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    User user = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
+                                            in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
+                                            response.getInt("sexo"),response.getString("auth_key"));
+                                    user.saveUserInFile(getApplicationContext());
+                                    Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
+                                    startActivity(Index);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(LoginActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            Toast.makeText(LoginActivity.this, "Email/Password errado", Toast.LENGTH_SHORT).show();
+                        }
+                    }, new Response.ErrorListener() {
+                public void onErrorResponse(VolleyError error) {
+                    //algum erro, por exemplo cena
+                    Toast.makeText(LoginActivity.this, "Email/Password errado", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            requestQueue.add(jsonObject);
+        } catch (JSONException e) {
+            Toast.makeText(LoginActivity.this, "Ocurreu algum erro, tente mais tarde de novo", Toast.LENGTH_SHORT).show();
+        }
     }
 }

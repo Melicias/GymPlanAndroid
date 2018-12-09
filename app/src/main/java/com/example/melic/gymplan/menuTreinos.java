@@ -102,13 +102,13 @@ public class menuTreinos extends Fragment {
         if(this.escolha == MENU){
             //menu option
             //ONLINE
-            this.treinos = SingletonData.getInstance(getActivity(), MENU,progressBar).getTreinosArray(MENU);
+            this.treinos = SingletonData.getInstance(getActivity(), MENU).getTreinosArray(MENU);
             /*GestorTreino gt = new GestorTreino(0);
             this.treinos = gt.getTreinos();*/
         }else{
             //meus treinos option
             //OFFLINE
-            this.treinos = SingletonData.getInstance(getActivity(), MEU,progressBar).getTreinosArray(MEU);
+            this.treinos = SingletonData.getInstance(getActivity(), MEU).getTreinosArray(MEU);
             /*GestorTreino gt = new GestorTreino(0);
             this.treinos = gt.getTreinos();*/
         }
@@ -135,9 +135,9 @@ public class menuTreinos extends Fragment {
             rvTreinos.setLayoutManager(new LinearLayoutManager(getContext()));
             final GestorCategoria gc;
             if(this.escolha == MENU){
-                gc = SingletonData.getInstance(getActivity(), MENU,progressBar).getGestorCategorias(MENU);
+                gc = SingletonData.getInstance(getActivity(), MENU).getGestorCategorias(MENU);
             }else{
-                gc = SingletonData.getInstance(getActivity(), MEU,progressBar).getGestorCategorias(MEU);
+                gc = SingletonData.getInstance(getActivity(), MEU).getGestorCategorias(MEU);
             }
             ArrayAdapter<String> spinnerArrayAdapterCategoria = new ArrayAdapter<String>(
                     getContext(),R.layout.spinner_item,gc.getCategoriasString()){
@@ -162,9 +162,9 @@ public class menuTreinos extends Fragment {
             };
             final GestorDificuldade gd;
             if(this.escolha == MENU){
-                gd = SingletonData.getInstance(getActivity(), MENU,progressBar).getGestorDificuldades(MENU);
+                gd = SingletonData.getInstance(getActivity(), MENU).getGestorDificuldades(MENU);
             }else{
-                gd = SingletonData.getInstance(getActivity(), MEU,progressBar).getGestorDificuldades(MEU);
+                gd = SingletonData.getInstance(getActivity(), MEU).getGestorDificuldades(MEU);
             }
             ArrayAdapter<String> spinnerArrayAdapterDificuldade = new ArrayAdapter<String>(
                     getContext(),R.layout.spinner_item,gd.getDificuldadesString()){

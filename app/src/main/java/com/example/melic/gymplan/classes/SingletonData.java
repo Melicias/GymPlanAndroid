@@ -20,6 +20,8 @@ public class SingletonData {
     private int escolha;
     private Context context;
 
+    private User user;
+
     private GestorCategoria gestorCategoriasOnline;
     private GestorDificuldade gestorDificuldadesOnline;
     private GestorTreino gestorTreinoOnline;
@@ -40,6 +42,9 @@ public class SingletonData {
     private SingletonData(Context context, int escolha) {
         this.escolha = escolha;
         this.context = context;
+
+        this.user = new User();
+        this.user = this.user.getUserFromFile(context);
 
         reloadArraysOnline();
 

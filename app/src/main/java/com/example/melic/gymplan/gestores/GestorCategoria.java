@@ -15,11 +15,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.melic.gymplan.IndexActivity;
 import com.example.melic.gymplan.classes.CategoriaTreino;
 import com.example.melic.gymplan.classes.SingletonData;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
 import org.json.JSONArray;
 import org.json.JSONException;

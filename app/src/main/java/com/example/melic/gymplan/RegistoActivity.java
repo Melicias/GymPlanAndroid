@@ -2,12 +2,15 @@ package com.example.melic.gymplan;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -18,16 +21,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.melic.gymplan.classes.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class RegistoActivity extends AppCompatActivity {
 
@@ -35,6 +38,8 @@ public class RegistoActivity extends AppCompatActivity {
     RadioButton rbMasculino,rbFeminino;
     Button btRegistar;
     Calendar myCalendar;
+
+    private static String URL = "https://gymplanyii.000webhostapp.com/GymPlanYii/api/web/user/signup";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,54 +67,51 @@ public class RegistoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkValues()){
-                    if(!emailExists()){
-                        try {
-                            String URL = "";
-                            JSONObject jsonBody = new JSONObject();
+                    final ProgressBar pb = (ProgressBar) findViewById(R.id.progressBarRegisto);
+                    final ConstraintLayout cl = (ConstraintLayout)findViewById(R.id.clRegisto);
+                    try {
+                        JSONObject jsonBody = new JSONObject();
+                        jsonBody.put("primeiroNome", etPrimeiroNome.getText());
+                        jsonBody.put("ultimoNome", etUltimoNome.getText());
+                        jsonBody.put("email", etEmail.getText());
+                        jsonBody.put("data", etData.getText());
+                        jsonBody.put("peso", Double.parseDouble(etPeso.getText().toString()));
+                        jsonBody.put("altura", Double.parseDouble(etAltura.getText().toString()));
+                        jsonBody.put("sexo", getSexo());
+                        jsonBody.put("password", etPassword.getText());
 
-                            jsonBody.put("primeiroNome", etPrimeiroNome);
-                            jsonBody.put("ultimoNome", etUltimoNome);
-                            jsonBody.put("email", etEmail);
-                            jsonBody.put("data", etData);
-                            jsonBody.put("peso", etPeso);
-                            jsonBody.put("altura", etAltura);
-                            jsonBody.put("password", etPassword);
-                            jsonBody.put("repeatPassword", etPasswordRepetida);
-                            jsonBody.put("sexo", getSexo());
+                        pb.setVisibility(View.VISIBLE);
+                        cl.setVisibility(View.GONE);
+                        JsonObjectRequest jsonObject = new JsonObjectRequest(
+                                Request.Method.POST,
+                                URL,
+                                jsonBody,
+                                new Response.Listener<JSONObject>() {
+                            public void onResponse(JSONObject response) {
+                                //return user
+                                //ir para o login e dar login pela pessoa!
+                                //ou fazer o pedido de login e pronto
+                                //LoginActivity
+                                efetuarLogin(etEmail.getText().toString(),etPassword.getText().toString());
+                            }
+                        }, new Response.ErrorListener() {
+                            public void onErrorResponse(VolleyError error) {
+                                //algum erro, por exemplo cena
+                                pb.setVisibility(View.GONE);
+                                cl.setVisibility(View.VISIBLE);
+                                Toast.makeText(RegistoActivity.this, "Email já usado", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-
-
-                            JsonObjectRequest jsonObject = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
-                                public void onResponse(JSONObject response) {
-
-                                    Toast.makeText(getApplicationContext(), "Response:  " + response.toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            }, new Response.ErrorListener() {
-
-                                public void onErrorResponse(VolleyError error) {
-
-                                    onBackPressed();
-
-                                }
-                            }) {
-                                public Map<String, String> getHeaders() throws AuthFailureError {
-                                    final Map<String, String> headers = new HashMap<>();
-                                    headers.put("Authorization", "Basic " + "c2FnYXJAa2FydHBheS5jb206cnMwM2UxQUp5RnQzNkQ5NDBxbjNmUDgzNVE3STAyNzI=");//put your token here
-                                    return headers;
-                                }
-                            };
-                            RequestQueue requestQueue = Volley.newRequestQueue(this.context);
-                            requestQueue.add(context);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_LONG).show();
-
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        requestQueue.add(jsonObject);
+                    } catch (JSONException e) {
+                        pb.setVisibility(View.GONE);
+                        cl.setVisibility(View.VISIBLE);
+                        Toast.makeText(RegistoActivity.this, "Ocurreu algum erro, tente mais tarde de novo", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
-
         });
 
         this.rbMasculino.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +130,6 @@ public class RegistoActivity extends AppCompatActivity {
             }
         });
 
-
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -141,6 +142,7 @@ public class RegistoActivity extends AppCompatActivity {
             }
 
         };
+
         this.etData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,10 +155,57 @@ public class RegistoActivity extends AppCompatActivity {
     }
 
     private void updateLabel(Calendar myCalendar) {
-        String myFormat = "dd/MM/yy"; //In which you need put here
+        String myFormat = "dd-MM-yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         this.etData.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    public void efetuarLogin(String email, String password) {
+
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("email", email);
+            jsonBody.put("password", password);
+
+            JsonObjectRequest jsonObject = new JsonObjectRequest(
+                    Request.Method.POST,
+                    "https://gymplanyii.000webhostapp.com/GymPlanYii/api/web/user/login",
+                    jsonBody,
+                    new Response.Listener<JSONObject>() {
+                        public void onResponse(JSONObject response) {
+                            //save num file do user
+                            if(!response.isNull("primeiroNome")){
+                                try {
+                                    SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    User user = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
+                                            in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
+                                            response.getInt("sexo"),response.getString("auth_key"));
+                                    user.saveUserInFile(getApplicationContext());
+                                    Intent Index = new Intent(RegistoActivity.this,IndexActivity.class);
+                                    startActivity(Index);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(RegistoActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            Toast.makeText(RegistoActivity.this, "Email/Password errado", Toast.LENGTH_SHORT).show();
+                        }
+                    }, new Response.ErrorListener() {
+                public void onErrorResponse(VolleyError error) {
+                    //algum erro, por exemplo cena
+                    Toast.makeText(RegistoActivity.this, "Email/Password errado", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            requestQueue.add(jsonObject);
+        } catch (JSONException e) {
+            Toast.makeText(RegistoActivity.this, "Ocurreu algum erro, tente mais tarde de novo", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private int getSexo(){
@@ -165,6 +214,7 @@ public class RegistoActivity extends AppCompatActivity {
         }
         return 0;
     }
+
     private boolean checkValues(){
         if(this.etPrimeiroNome.getText().toString().length() >= 3){
             if(this.etUltimoNome.getText().toString().length() >= 3){
@@ -172,7 +222,7 @@ public class RegistoActivity extends AppCompatActivity {
                     if(this.etData.getText().toString().length() != 0){
                         if(this.etAltura.getText().toString().length() != 0){
                             if(this.etPeso.getText().toString().length() != 0){
-                                if(this.etPassword.getText().toString().length() >= 3){
+                                if(this.etPassword.getText().toString().length() >= 6){
                                     if(getAge() >= 12){
                                         if(this.etPassword.getText().toString().equals(this.etPasswordRepetida.getText().toString())){
                                             try{
@@ -180,36 +230,43 @@ public class RegistoActivity extends AppCompatActivity {
                                                 Double peso = Double.parseDouble(this.etPeso.getText().toString());
 
                                                 String[] splitterAltura = altura.toString().split("\\.");
-                                                if(splitterAltura.length>=2){
+                                                if(splitterAltura.length==2){
                                                     if(splitterAltura[0].length() >= 1 && splitterAltura[1].length() >= 1 && splitterAltura[0].length() <= 2 && splitterAltura[1].length() <= 2){
                                                         String[] splitterPeso = peso.toString().split("\\.");
-                                                        if(splitterPeso.length>=2){
+                                                        if(splitterPeso.length==2){
                                                             if(splitterPeso[0].length() >= 1 && splitterPeso[1].length() >= 1 && splitterPeso[0].length() <= 3 && splitterPeso[1].length() <= 3){
-                                                                return true;
+                                                                if(altura >= 1 && altura <= 2.50){
+                                                                    if(peso >= 25 && peso <= 300){
+                                                                        return true;
+                                                                    }else{
+                                                                        Toast.makeText(getApplicationContext(), "O peso deverá ser superior a 25 kg e inferior a 300 kg", Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                }else{
+                                                                    Toast.makeText(getApplicationContext(), "A altura deverá ser superior a 1 metro e inferior a 2.50 metros", Toast.LENGTH_LONG).show();
+                                                                }
                                                             }else{
-                                                                Toast.makeText(getApplicationContext(), "peso insuficiente", Toast.LENGTH_LONG).show();
-
+                                                                Toast.makeText(getApplicationContext(), "O formato da altura deve ser como o seguinte exemplo: 70.80 ou 71", Toast.LENGTH_LONG).show();
                                                             }
                                                         }else{
-                                                            Toast.makeText(getApplicationContext(), "peso só com 1 ou 2", Toast.LENGTH_LONG).show();
+                                                            Toast.makeText(getApplicationContext(), "Peso inválido", Toast.LENGTH_LONG).show();
                                                         }
                                                     }else{
-                                                        Toast.makeText(getApplicationContext(), "numeros errados na altura", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(getApplicationContext(), "O formato da altura deve ser como o seguinte exemplo: 1.80", Toast.LENGTH_LONG).show();
                                                     }
                                                 }else{
-                                                    Toast.makeText(getApplicationContext(), "altura só com 1 ou 2", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(getApplicationContext(), "Altura inválida", Toast.LENGTH_LONG).show();
                                                 }
                                             }catch(IllegalArgumentException ex){
-                                                Toast.makeText(getApplicationContext(), "Erro de conversão", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getApplicationContext(), "Erro a converter", Toast.LENGTH_LONG).show();
                                             }
                                         }else{
-                                            Toast.makeText(getApplicationContext(), "Password errada", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), "As duas passwords não coincidem", Toast.LENGTH_LONG).show();
                                         }
                                     }else{
-                                        Toast.makeText(getApplicationContext(), "Idade insuficiente", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(), "Idade insuficiente. Têm de ter no minimo 12 anos", Toast.LENGTH_LONG).show();
                                     }
                                 }else{
-                                    Toast.makeText(getApplicationContext(), "Password demasiado fraca, insira uma password com mais de 3 carateres", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Password demasiado fraca, insira uma password com mais de 6 carateres", Toast.LENGTH_LONG).show();
                                 }
                             }else{
                                 Toast.makeText(getApplicationContext(), "Insira o seu peso", Toast.LENGTH_LONG).show();
@@ -224,7 +281,7 @@ public class RegistoActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Por favor insira um e-mail válido", Toast.LENGTH_LONG).show();
                 }
             }else{
-                Toast.makeText(getApplicationContext(), "Apelido demasiado pequeno", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Último nome demasiado pequeno", Toast.LENGTH_LONG).show();
             }
         }else{
             Toast.makeText(getApplicationContext(), "Nome demasiado pequeno", Toast.LENGTH_LONG).show();
@@ -232,20 +289,12 @@ public class RegistoActivity extends AppCompatActivity {
         return false;
     }
 
-    private boolean emailExists(){
-        
-        return false;
-    }
-
     private int getAge(){
         Calendar today = Calendar.getInstance();
-
         int age = today.get(Calendar.YEAR) - this.myCalendar.get(Calendar.YEAR);
-
         if (today.get(Calendar.DAY_OF_YEAR) < this.myCalendar.get(Calendar.DAY_OF_YEAR)){
             age--;
         }
-
         return age;
     }
 

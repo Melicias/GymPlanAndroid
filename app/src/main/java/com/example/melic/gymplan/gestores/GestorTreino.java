@@ -2,8 +2,6 @@ package com.example.melic.gymplan.gestores;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,8 +11,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.melic.gymplan.IndexActivity;
-import com.example.melic.gymplan.classes.CategoriaTreino;
-import com.example.melic.gymplan.classes.DificuldadeTreino;
 import com.example.melic.gymplan.classes.Exercicio;
 import com.example.melic.gymplan.classes.SingletonData;
 import com.example.melic.gymplan.classes.Treino;
