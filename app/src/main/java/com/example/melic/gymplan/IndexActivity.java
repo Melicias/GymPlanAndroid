@@ -24,6 +24,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 
 public class IndexActivity extends AppCompatActivity
@@ -65,7 +67,17 @@ public class IndexActivity extends AppCompatActivity
         this.first = false;
     }
 
-
+    public void progressBar(boolean pb){
+        ProgressBar progressBar =(ProgressBar) findViewById(R.id.progressBar);
+        FrameLayout fl = (FrameLayout) findViewById(R.id.content_frame);
+        if(pb == true){
+            progressBar.setVisibility(View.VISIBLE);
+            fl.setVisibility(View.GONE);
+        }else{
+            progressBar.setVisibility(View.GONE);
+            fl.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public void onBackPressed() {

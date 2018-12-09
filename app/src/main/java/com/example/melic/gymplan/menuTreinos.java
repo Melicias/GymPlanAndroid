@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Filter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,21 +97,21 @@ public class menuTreinos extends Fragment {
         View view = inflater.inflate(R.layout.fragment_menu_treinos, container, false);
 
         RecyclerView rvTreinos =(RecyclerView)view.findViewById(R.id.rvTreinos);
+        ProgressBar progressBar =(ProgressBar) view.findViewById(R.id.pbMenuTreinos);
         // Initialize contacts
         if(this.escolha == MENU){
             //menu option
             //ONLINE
-            this.treinos = SingletonData.getInstance(MENU).getTreinosArray();
+            this.treinos = SingletonData.getInstance(getActivity(), MENU,progressBar).getTreinosArray(MENU);
             /*GestorTreino gt = new GestorTreino(0);
             this.treinos = gt.getTreinos();*/
         }else{
             //meus treinos option
             //OFFLINE
-            this.treinos = SingletonData.getInstance(MEU).getTreinosArray();
+            this.treinos = SingletonData.getInstance(getActivity(), MEU,progressBar).getTreinosArray(MEU);
             /*GestorTreino gt = new GestorTreino(0);
             this.treinos = gt.getTreinos();*/
         }
-
         if(this.treinos.size() == 0){
             ConstraintLayout cl = (ConstraintLayout)view.findViewById(R.id.clTreinos);
             cl.setVisibility(view.GONE);
@@ -134,9 +135,9 @@ public class menuTreinos extends Fragment {
             rvTreinos.setLayoutManager(new LinearLayoutManager(getContext()));
             final GestorCategoria gc;
             if(this.escolha == MENU){
-                gc = SingletonData.getInstance(MENU).getGestorCategorias();
+                gc = SingletonData.getInstance(getActivity(), MENU,progressBar).getGestorCategorias(MENU);
             }else{
-                gc = SingletonData.getInstance(MEU).getGestorCategorias();
+                gc = SingletonData.getInstance(getActivity(), MEU,progressBar).getGestorCategorias(MEU);
             }
             ArrayAdapter<String> spinnerArrayAdapterCategoria = new ArrayAdapter<String>(
                     getContext(),R.layout.spinner_item,gc.getCategoriasString()){
@@ -161,9 +162,9 @@ public class menuTreinos extends Fragment {
             };
             final GestorDificuldade gd;
             if(this.escolha == MENU){
-                gd = SingletonData.getInstance(MENU).getGestorDificuldades();
+                gd = SingletonData.getInstance(getActivity(), MENU,progressBar).getGestorDificuldades(MENU);
             }else{
-                gd = SingletonData.getInstance(MEU).getGestorDificuldades();
+                gd = SingletonData.getInstance(getActivity(), MEU,progressBar).getGestorDificuldades(MEU);
             }
             ArrayAdapter<String> spinnerArrayAdapterDificuldade = new ArrayAdapter<String>(
                     getContext(),R.layout.spinner_item,gd.getDificuldadesString()){

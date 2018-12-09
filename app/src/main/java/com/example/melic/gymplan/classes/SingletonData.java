@@ -1,8 +1,16 @@
 package com.example.melic.gymplan.classes;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.ProgressBar;
+
+import com.example.melic.gymplan.IndexActivity;
 import com.example.melic.gymplan.gestores.GestorCategoria;
 import com.example.melic.gymplan.gestores.GestorDificuldade;
 import com.example.melic.gymplan.gestores.GestorTreino;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -10,48 +18,92 @@ public class SingletonData {
 
     private static SingletonData INSTANCE = null;
     private int escolha;
+    private Context context;
 
-    private GestorCategoria gestorCategorias;
-    private GestorDificuldade gestorDificuldades;
-    private GestorTreino gestorTreino;
+    private GestorCategoria gestorCategoriasOnline;
+    private GestorDificuldade gestorDificuldadesOnline;
+    private GestorTreino gestorTreinoOnline;
+
+    private GestorCategoria gestorCategoriasOffline;
+    private GestorDificuldade gestorDificuldadesOffline;
+    private GestorTreino gestorTreinoOffline;
 
 
-    public static synchronized SingletonData getInstance(int escolha)
+    public static synchronized SingletonData getInstance(Context context, int escolha)
     {
         if( INSTANCE == null ){
-            INSTANCE = new SingletonData(escolha);
+            INSTANCE = new SingletonData(context, escolha);
         }
         return INSTANCE;
     }
-    private SingletonData(int escolha) {
+
+    private SingletonData(Context context, int escolha) {
         this.escolha = escolha;
-        this.gestorCategorias = new GestorCategoria(escolha);
-        this.gestorDificuldades = new GestorDificuldade(escolha);
-        this.gestorTreino = new GestorTreino(escolha);
+        this.context = context;
+
+        reloadArraysOnline();
+
+        realoadArraysOffline();
     }
 
-    public GestorCategoria getGestorCategorias(){
-        return this.gestorCategorias;
+    public void realoadArraysOffline(){
+        this.gestorCategoriasOffline = new GestorCategoria(context, GestorCategoria.OFFLINE);
+        this.gestorDificuldadesOffline = new GestorDificuldade(context, GestorDificuldade.OFFLINE);
+        this.gestorTreinoOffline = new GestorTreino(context, GestorTreino.OFFLINE);
     }
 
-    public ArrayList<CategoriaTreino> getCategoriaTreinoArray(){
-        return this.gestorCategorias.getCategorias();
+    public void reloadArraysOnline(){
+        ((IndexActivity)context).progressBar(true);
+        this.gestorCategoriasOnline = new GestorCategoria(context, GestorCategoria.ONLINE);
+        this.gestorDificuldadesOnline = new GestorDificuldade(context, GestorDificuldade.ONLINE);
+        this.gestorTreinoOnline = new GestorTreino(context, GestorTreino.ONLINE);
     }
 
-    public GestorDificuldade getGestorDificuldades(){
-        return this.gestorDificuldades;
+    public GestorCategoria getGestorCategorias(int escolha){
+        if(escolha == GestorTreino.ONLINE)
+            return this.gestorCategoriasOnline;
+        return this.gestorCategoriasOffline;
     }
 
-    public ArrayList<DificuldadeTreino> getDificuldadeTreinoArray(){
-        return this.gestorDificuldades.getDificuldades();
+    public ArrayList<CategoriaTreino> getCategoriaTreinoArray(int escolha){
+        if(escolha == GestorTreino.ONLINE)
+            return this.gestorCategoriasOnline.getCategorias();
+        return this.gestorCategoriasOffline.getCategorias();
     }
 
-    public GestorTreino getGestorTreinos(){
-        return this.gestorTreino;
+    public GestorDificuldade getGestorDificuldades(int escolha){
+        if(escolha == GestorTreino.ONLINE)
+            return this.gestorDificuldadesOnline;
+        return this.gestorDificuldadesOffline;
     }
 
-    public ArrayList<Treino> getTreinosArray(){
-        return this.gestorTreino.getTreinos();
+    public ArrayList<DificuldadeTreino> getDificuldadeTreinoArray(int escolha){
+        if(escolha == GestorTreino.ONLINE)
+            return this.gestorDificuldadesOnline.getDificuldades();
+        return this.gestorDificuldadesOffline.getDificuldades();
     }
 
+    public GestorTreino getGestorTreinos(int escolha){
+        if(escolha == GestorTreino.ONLINE)
+            return this.gestorTreinoOnline;
+        return this.gestorTreinoOffline;
+    }
+
+    public ArrayList<Treino> getTreinosArray(int escolha){
+        if(escolha == GestorTreino.ONLINE)
+            return this.gestorTreinoOnline.getTreinos();
+        return this.gestorTreinoOffline.getTreinos();
+    }
+
+    public void setCategorias(ArrayList<CategoriaTreino>cats){
+        this.gestorCategoriasOnline.setCategorias(cats);
+    }
+
+    public void setDificuldades(ArrayList<DificuldadeTreino>difs){
+        this.gestorDificuldadesOnline.setDificuldades(difs);
+    }
+
+    public void setTreinos(ArrayList<Treino>tres){
+        this.gestorTreinoOnline.setTreinos(tres);
+    }
 }
