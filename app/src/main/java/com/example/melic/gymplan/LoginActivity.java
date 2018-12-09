@@ -92,12 +92,17 @@ public class LoginActivity extends AppCompatActivity {
                             if(!response.isNull("primeiroNome")){
                                 try {
                                     SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    User user = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
-                                            in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
-                                            response.getInt("sexo"),response.getString("auth_key"));
-                                    user.saveUserInFile(getApplicationContext());
-                                    Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
-                                    startActivity(Index);
+                                    if(response.getInt("status") != 10){
+                                        Toast.makeText(LoginActivity.this, "A sua conta esta bloqueada por algum motivo!", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        User user = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
+                                                in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
+                                                response.getInt("sexo"),response.getString("auth_key"));
+                                        user.saveUserInFile(getApplicationContext());
+                                        Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
+                                        startActivity(Index);
+                                    }
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                     Toast.makeText(LoginActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
