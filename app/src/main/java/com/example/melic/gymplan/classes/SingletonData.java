@@ -22,6 +22,7 @@ public class SingletonData {
 
     private User user;
 
+
     private GestorCategoria gestorCategoriasOnline;
     private GestorDificuldade gestorDificuldadesOnline;
     private GestorTreino gestorTreinoOnline;
@@ -29,6 +30,7 @@ public class SingletonData {
     private GestorCategoria gestorCategoriasOffline;
     private GestorDificuldade gestorDificuldadesOffline;
     private GestorTreino gestorTreinoOffline;
+
 
 
     public static synchronized SingletonData getInstance(Context context, int escolha)
@@ -55,6 +57,7 @@ public class SingletonData {
         this.gestorCategoriasOffline = new GestorCategoria(context, GestorCategoria.OFFLINE);
         this.gestorDificuldadesOffline = new GestorDificuldade(context, GestorDificuldade.OFFLINE);
         this.gestorTreinoOffline = new GestorTreino(context, GestorTreino.OFFLINE);
+
     }
 
     public void reloadArraysOnline(){
@@ -62,6 +65,8 @@ public class SingletonData {
         this.gestorCategoriasOnline = new GestorCategoria(context, GestorCategoria.ONLINE);
         this.gestorDificuldadesOnline = new GestorDificuldade(context, GestorDificuldade.ONLINE);
         this.gestorTreinoOnline = new GestorTreino(context, GestorTreino.ONLINE);
+
+
     }
 
     public GestorCategoria getGestorCategorias(int escolha){
@@ -111,4 +116,8 @@ public class SingletonData {
     public void setTreinos(ArrayList<Treino>tres){
         this.gestorTreinoOnline.setTreinos(tres);
     }
+    public User getUser() {
+        return this.user;
+    }
+
 }
