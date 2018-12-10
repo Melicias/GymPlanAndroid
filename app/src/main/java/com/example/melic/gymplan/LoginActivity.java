@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //checkForLogin();
+        checkForLogin();
     }
 
     public boolean checkValues() {

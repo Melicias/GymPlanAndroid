@@ -62,9 +62,9 @@ public class SingletonData {
 
     public void reloadArraysOnline(){
         ((IndexActivity)context).progressBar(true);
-        this.gestorCategoriasOnline = new GestorCategoria(context, GestorCategoria.ONLINE);
-        this.gestorDificuldadesOnline = new GestorDificuldade(context, GestorDificuldade.ONLINE);
-        this.gestorTreinoOnline = new GestorTreino(context, GestorTreino.ONLINE);
+        this.gestorCategoriasOnline = new GestorCategoria(context, GestorCategoria.ONLINE,this.user.getAuth_key());
+        this.gestorDificuldadesOnline = new GestorDificuldade(context, GestorDificuldade.ONLINE,this.user.getAuth_key());
+        this.gestorTreinoOnline = new GestorTreino(context, GestorTreino.ONLINE,this.user.getAuth_key());
 
 
     }

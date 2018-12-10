@@ -35,12 +35,21 @@ public class GestorCategoria {
     private static final String URL = "categoria?access-token=";
 
     private Context context;
-
+    private String accessToken;
     private ArrayList<CategoriaTreino> categorias;
+
+    public GestorCategoria( Context context, int escolha, String accessToken){
+        this.context = context;
+        this.accessToken = accessToken;
+        choice(escolha);
+    }
 
     public GestorCategoria( Context context, int escolha){
         this.context = context;
+        choice(escolha);
+    }
 
+    public void choice(int escolha){
         categorias = new ArrayList<>();
         if(escolha == ONLINE){
             getDataFromAPI();
@@ -82,7 +91,7 @@ public class GestorCategoria {
     private void getDataFromAPI(){
         RequestQueue requestQueue = Volley.newRequestQueue(this.context);
         // Initialize a new JsonArrayRequest instance
-        String url = context.getResources().getString(R.string.url) + URL + "Fz2k6AdzS07NkGujDW28GEdZaghX5VHP";
+        String url = context.getResources().getString(R.string.url) + URL + accessToken;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
             Request.Method.GET,
                 url,
