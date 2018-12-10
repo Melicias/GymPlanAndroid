@@ -116,8 +116,13 @@ public class SingletonData {
     public void setTreinos(ArrayList<Treino>tres){
         this.gestorTreinoOnline.setTreinos(tres);
     }
+
     public User getUser() {
         return this.user;
+    }
+
+    public String getAccessToken() {
+        return this.user.getAuth_key();
     }
 
 }

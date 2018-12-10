@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.melic.gymplan.IndexActivity;
+import com.example.melic.gymplan.R;
 import com.example.melic.gymplan.classes.CategoriaTreino;
 import com.example.melic.gymplan.classes.SingletonData;
 
@@ -31,8 +32,7 @@ public class GestorCategoria {
     public static final int ONLINE = 1;
     public static final int OFFLINE = 2;
 
-    private static final String URL = "https://gymplanyii.000webhostapp.com/GymPlanYii/api/web/categoria?access-token=u3JAFUo5Mk2KuYg8yOgKpJ6snvgpKi7L";
-    public String accessToken = "";
+    private static final String URL = "categoria?access-token=";
 
     private Context context;
 
@@ -82,9 +82,10 @@ public class GestorCategoria {
     private void getDataFromAPI(){
         RequestQueue requestQueue = Volley.newRequestQueue(this.context);
         // Initialize a new JsonArrayRequest instance
+        String url = context.getResources().getString(R.string.url) + URL + "Fz2k6AdzS07NkGujDW28GEdZaghX5VHP";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
             Request.Method.GET,
-            URL,
+                url,
                 null,
             new Response.Listener<JSONArray>() {
                 @Override

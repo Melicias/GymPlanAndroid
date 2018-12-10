@@ -40,7 +40,7 @@ public class RegistoActivity extends AppCompatActivity {
     Button btRegistar;
     Calendar myCalendar;
 
-    private static String URL = "https://gymplanyii.000webhostapp.com/GymPlanYii/api/web/user/signup";
+    private static String URL = "user/signup";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class RegistoActivity extends AppCompatActivity {
                         cl.setEnabled(false);
                         JsonObjectRequest jsonObject = new JsonObjectRequest(
                                 Request.Method.POST,
-                                URL,
+                                getResources().getString(R.string.url) + URL,
                                 jsonBody,
                                 new Response.Listener<JSONObject>() {
                             public void onResponse(JSONObject response) {

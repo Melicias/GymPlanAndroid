@@ -1,11 +1,13 @@
 package com.example.melic.gymplan;
 
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvRegistar;
     EditText etEmail, etPassword;
 
-    private static String URL = "https://gymplanyii.000webhostapp.com/GymPlanYii/api/web/user/login";
+    private static String URL = "user/login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //checkForLogin();
     }
 
     public boolean checkValues() {
@@ -77,53 +81,104 @@ public class LoginActivity extends AppCompatActivity {
 
     public void efetuarLogin(String email, String password) {
 
+        final ProgressBar pb = (ProgressBar) findViewById(R.id.pbLogin);
+        final ConstraintLayout cl = (ConstraintLayout)findViewById(R.id.clLogin);
+
         try {
+            pb.setVisibility(View.VISIBLE);
+            cl.setEnabled(false);
+
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("email", email);
             jsonBody.put("password", password);
-
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplication());
             JsonObjectRequest jsonObject = new JsonObjectRequest(
                     Request.Method.POST,
-                    URL,
+                    getResources().getString(R.string.url) + URL,
                     jsonBody,
                     new Response.Listener<JSONObject>() {
                         public void onResponse(JSONObject response) {
                             //save num file do user
                             if(!response.isNull("primeiroNome")){
-                                try {
-                                    SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    if(response.getInt("status") != 10){
-                                        Toast.makeText(LoginActivity.this, "A sua conta esta bloqueada por algum motivo!", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        User user = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
-                                                in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
-                                                response.getInt("sexo"),response.getString("auth_key"));
-                                        user.saveUserInFile(getApplicationContext());
-                                        Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
-                                        startActivity(Index);
-                                    }
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(LoginActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-
+                                login(response);
+                            }else{
+                                Toast.makeText(LoginActivity.this, "Email/Password errado", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(LoginActivity.this, "Email/Password errado", Toast.LENGTH_SHORT).show();
+                            pb.setVisibility(View.GONE);
+                            cl.setEnabled(true);
                         }
                     }, new Response.ErrorListener() {
                 public void onErrorResponse(VolleyError error) {
                     //algum erro, por exemplo cena
-                    Toast.makeText(LoginActivity.this, "Email/Password errado", Toast.LENGTH_SHORT).show();
+                    pb.setVisibility(View.GONE);
+                    cl.setEnabled(true);
+                    Toast.makeText(LoginActivity.this, "Email/Password errado | timeout", Toast.LENGTH_SHORT).show();
                 }
             });
-
-            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             requestQueue.add(jsonObject);
         } catch (JSONException e) {
+            pb.setVisibility(View.GONE);
+            cl.setEnabled(true);
             Toast.makeText(LoginActivity.this, "Ocurreu algum erro, tente mais tarde de novo", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void checkForLogin(){
+        User user = new User();
+        user = user.getUserFromFile(this);
+        if(user.getAuth_key() != null){
+            //pedido a bd e login
+            final ProgressBar pb = (ProgressBar) findViewById(R.id.pbLogin);
+            final ConstraintLayout cl = (ConstraintLayout)findViewById(R.id.clLogin);
+            pb.setVisibility(View.VISIBLE);
+            cl.setEnabled(false);
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplication());
+            String url = getResources().getString(R.string.url) + "userupdate/status?access-token=" + user.getAuth_key();
+            JsonObjectRequest jsonObject = new JsonObjectRequest(
+                    Request.Method.GET,
+                    url,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        public void onResponse(JSONObject response) {
+                            //save num file do user
+                            if(!response.isNull("primeiroNome")){
+                                login(response);
+                            }else{
+                                Toast.makeText(LoginActivity.this, "Login timeout", Toast.LENGTH_SHORT).show();
+                            }
+                            pb.setVisibility(View.GONE);
+                            cl.setEnabled(true);
+                        }
+                    }, new Response.ErrorListener() {
+                public void onErrorResponse(VolleyError error) {
+                    //algum erro, por exemplo cena
+                    pb.setVisibility(View.GONE);
+                    cl.setEnabled(true);
+                    Toast.makeText(LoginActivity.this, "Login timeout", Toast.LENGTH_SHORT).show();
+                }
+            });
+            requestQueue.add(jsonObject);
+        }
+    }
+
+    public void login(JSONObject response){
+        try {
+            SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            if(response.getInt("status") != 10){
+                Toast.makeText(LoginActivity.this, "A sua conta esta bloqueada por algum motivo!", Toast.LENGTH_SHORT).show();
+            }else{
+                User user = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
+                        in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
+                        response.getInt("sexo"),response.getString("auth_key"));
+                user.saveUserInFile(getApplicationContext());
+                Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
+                startActivity(Index);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(LoginActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 }

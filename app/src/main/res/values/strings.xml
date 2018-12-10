@@ -15,6 +15,6 @@
     <string name="title_activity_treino">TreinoActivity</string>
     <string name="title_activity_test">test</string>
 
-
-    <string name="url">https://gymplanyii.000webhostapp.com/GymPlanYii/api/web/</string>
+    <!-- EXEMPLO DE URL http://7cb9f364.ngrok.io/GymPlanYii/api/web/ -->
+    <string name="url">http://7cb9f364.ngrok.io/GymPlanYii/api/web/</string>
 </resources>
