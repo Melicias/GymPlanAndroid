@@ -163,12 +163,12 @@ public class GestorTreino {
         jsonArrayRequest.setRetryPolicy(new RetryPolicy() {
             @Override
             public int getCurrentTimeout() {
-                return 50000;
+                return 25000;
             }
 
             @Override
             public int getCurrentRetryCount() {
-                return 50000;
+                return 25000;
             }
 
             @Override

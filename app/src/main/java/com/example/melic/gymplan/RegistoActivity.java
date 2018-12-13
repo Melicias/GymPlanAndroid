@@ -97,6 +97,7 @@ public class RegistoActivity extends AppCompatActivity {
                                     user.saveUserInFile(getApplicationContext());
                                     Intent Index = new Intent(RegistoActivity.this,IndexActivity.class);
                                     startActivity(Index);
+                                    finish();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                     Toast.makeText(RegistoActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();

@@ -1,6 +1,19 @@
 package com.example.melic.gymplan.classes;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.melic.gymplan.LoginActivity;
+import com.example.melic.gymplan.R;
+
+import org.json.JSONObject;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -70,5 +83,29 @@ public class User implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void deleteUserFile(Context context){
+        context.deleteFile(FILE_NAME);
+    }
+
+    public String getPrimeiroNome(){
+        return  this.primeiroNome;
+    }
+
+    public String getUltimoNome(){
+        return  this.ultimoNome;
+    }
+
+    public Double getAltura(){
+        return this.altura;
+    }
+
+    public Double getPeso(){
+        return this.peso;
+    }
+
+    public int getId(){
+        return this.id;
     }
 }

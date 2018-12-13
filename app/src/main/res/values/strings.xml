@@ -16,5 +16,5 @@
     <string name="title_activity_test">test</string>
 
     <!-- EXEMPLO DE URL http://7cb9f364.ngrok.io/GymPlanYii/api/web/ -->
-    <string name="url">http://17cb7611.ngrok.io/GymPlanYii/api/web/</string>
+    <string name="url">http://68.183.221.203/GymPlanYii/api/web/</string>
 </resources>

@@ -124,8 +124,7 @@ public class menuTreinos extends Fragment {
                 btRederecionarMenuTreinos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //mandar para Menu treinos
-                        //fazer a acao
+                        ((IndexActivity)getActivity()).mudarParaMenuTreino(R.id.nav_todosTreinos);
                     }
                 });
             }

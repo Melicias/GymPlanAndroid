@@ -1,6 +1,7 @@
 package com.example.melic.gymplan;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+
+import com.example.melic.gymplan.classes.User;
 
 
 public class IndexActivity extends AppCompatActivity
@@ -115,7 +118,11 @@ public class IndexActivity extends AppCompatActivity
             tag = "minhaConta";
             fragment = new minhaConta();
         } else if (id == R.id.nav_logout) {
-
+            User u = new User();
+            u.deleteUserFile(getApplicationContext());
+            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(i);
+            finish();
         }
 
         if (fragment != null) {
@@ -134,5 +141,13 @@ public class IndexActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public void mudarParaMenuTreino(int opcao){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.setCheckedItem(opcao);
+        onNavigationItemSelected(navigationView.getMenu().findItem(opcao));
     }
 }

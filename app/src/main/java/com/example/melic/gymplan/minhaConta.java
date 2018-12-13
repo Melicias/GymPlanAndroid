@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -32,17 +33,17 @@ import java.text.SimpleDateFormat;
 
 
 public class minhaConta extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-    // TODO: Rename and change types of parameters
-
 
     private OnFragmentInteractionListener mListener;
 
     EditText etPrimeiroNome,etApelido,etAltura,etPeso;
     Button btAtualizarDados;
-    private static String URL = "https://gymplanyii.000webhostapp.com/GymPlanYii/api/web/user/signup";
+    ConstraintLayout cl;
+    ProgressBar pb;
+    TextView tvAtualizarDados;
+    private static String URL = "userupdate/update?id=";
+
+    private User user;
 
     public minhaConta() {
         // Required empty public constructor
@@ -65,6 +66,82 @@ public class minhaConta extends Fragment {
 
         }
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_minha_conta, container, false);
+        this.etPrimeiroNome = (EditText) view.findViewById(R.id.etPrimeiroNome);
+        this.etApelido = (EditText) view.findViewById(R.id.etApelido);
+        this.etAltura = (EditText) view.findViewById(R.id.etAltura);
+        this.etPeso = (EditText) view.findViewById(R.id.etPeso);
+        this.btAtualizarDados = (Button) view.findViewById(R.id.btAtualizarDados);
+        this.cl = (ConstraintLayout) view.findViewById(R.id.clMinhaConta);
+        this.pb = (ProgressBar) view.findViewById(R.id.pbMinhaConta);
+        this.tvAtualizarDados = (TextView) view.findViewById(R.id.tvAtualizarDados);
+
+        this.user = SingletonData.getInstance(getActivity(),0).getUser();
+
+        this.etPrimeiroNome.setText(this.user.getPrimeiroNome());
+        this.etApelido.setText(this.user.getUltimoNome());
+        this.etAltura.setText(this.user.getAltura() + "");
+        this.etPeso.setText(this.user.getPeso() + "");
+
+        this.btAtualizarDados.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if(checkValues()){
+                    atualizarDados();
+                }
+            }
+        });
+
+        this.tvAtualizarDados.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateUser();
+            }
+        });
+
+        return view;
+
+    }
+
+    private void atualizarDados(){
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("primeiroNome", etPrimeiroNome.getText());
+            jsonBody.put("ultimoNome", etApelido.getText());
+            jsonBody.put("peso", Double.parseDouble(etPeso.getText().toString()));
+            jsonBody.put("altura", Double.parseDouble(etAltura.getText().toString()));
+
+            String url = getActivity().getResources().getString(R.string.url) + URL + user.getId() + "&access-token=" + user.getAuth_key();
+            JsonObjectRequest jsonObject = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    url,
+                    jsonBody,
+                    new Response.Listener<JSONObject>() {
+                        public void onResponse(JSONObject response) {
+                            user.saveUserInFile(getContext());
+                            Toast.makeText(getActivity(), "Utilizador atualizado com sucesso!", Toast.LENGTH_SHORT).show();
+                            //((IndexActivity)getActivity()).mudarParaMenuTreino(R.id.nav_meusPlanos);
+                        }
+                    }, new Response.ErrorListener() {
+                public void onErrorResponse(VolleyError error) {
+                    //algum erro, por exemplo cena
+                    Toast.makeText(getActivity(), "Ocurreu um erro, tente de novo mais tarde.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            requestQueue.add(jsonObject);
+        } catch (JSONException e) {
+            Toast.makeText(getActivity(), "Erro na conversão", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean checkValues() {
@@ -115,62 +192,6 @@ public class minhaConta extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_minha_conta, container, false);
-         this.etPrimeiroNome = (EditText) view.findViewById(R.id.etPrimeiroNome);
-        this.etApelido = (EditText) view.findViewById(R.id.etApelido);
-        this.etAltura = (EditText) view.findViewById(R.id.etAltura);
-        this.etPeso = (EditText) view.findViewById(R.id.etPeso);
-        this.btAtualizarDados = (Button) view.findViewById(R.id.btAtualizarDados);
-
-        this.btAtualizarDados.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if(checkValues()){
-                    try {
-                        JSONObject jsonBody = new JSONObject();
-                        jsonBody.put("primeiroNome", etPrimeiroNome.getText());
-                        jsonBody.put("ultimoNome", etApelido.getText());
-                        jsonBody.put("peso", Double.parseDouble(etPeso.getText().toString()));
-                        jsonBody.put("altura", Double.parseDouble(etAltura.getText().toString()));
-
-                        JsonObjectRequest jsonObject = new JsonObjectRequest(
-                                Request.Method.POST,
-                                URL,
-                                jsonBody,
-                                new Response.Listener<JSONObject>() {
-                                    public void onResponse(JSONObject response) {
-                                        User user = SingletonData.getInstance(getContext(),1).getUser();
-                                        user.saveUserInFile(getContext());
-                                        Intent Index = new Intent(getActivity(),IndexActivity.class);
-                                        startActivity(Index);
-                                    }
-                                }, new Response.ErrorListener() {
-                            public void onErrorResponse(VolleyError error) {
-                                //algum erro, por exemplo cena
-                                Toast.makeText(getActivity(), "Bla bla", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-                        requestQueue.add(jsonObject);
-                    } catch (JSONException e) {
-
-                        Toast.makeText(getActivity(), "Ocurreu algum erro, tente mais tarde de novo", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-
-        return view;
-
-    }
-
-    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         View content = view.findViewById(R.id.content);
@@ -211,5 +232,50 @@ public class minhaConta extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void updateUser(){
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        String url = getActivity().getString(R.string.url) + "userupdate/status?access-token=" + this.user.getAuth_key();
+        JsonObjectRequest jsonObject = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    public void onResponse(JSONObject response) {
+                        //save num file do user
+                        if(!response.isNull("primeiroNome")){
+                            SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            try {
+                                User u = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
+                                        in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
+                                        response.getInt("sexo"),response.getString("auth_key"));
+                                user = u;
+                                user.saveUserInFile(getActivity());
+                                etPrimeiroNome.setText(user.getPrimeiroNome());
+                                etApelido.setText(user.getUltimoNome());
+                                etAltura.setText(user.getAltura() + "");
+                                etPeso.setText(user.getPeso() + "");
+                                Toast.makeText(getActivity(), "Dados atualizados com sucesso", Toast.LENGTH_SHORT).show();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            Toast.makeText(getActivity(), "Timeout", Toast.LENGTH_SHORT).show();
+                        }
+                        pb.setVisibility(View.GONE);
+                        cl.setEnabled(true);
+                    }
+                }, new Response.ErrorListener() {
+            public void onErrorResponse(VolleyError error) {
+                //algum erro, por exemplo cena
+                pb.setVisibility(View.GONE);
+                cl.setEnabled(true);
+                Toast.makeText(getActivity(), "Timeout", Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonObject);
     }
 }

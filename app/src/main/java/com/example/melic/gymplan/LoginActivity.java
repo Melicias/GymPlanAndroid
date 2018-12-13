@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -58,6 +59,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (checkValues()) {
                     efetuarLogin(etEmail.getText().toString(),etPassword.getText().toString());
                 }
+                InputMethodManager inputManager = (InputMethodManager) getSystemService(getApplication().INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
 
@@ -112,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                     //algum erro, por exemplo cena
                     pb.setVisibility(View.GONE);
                     cl.setEnabled(true);
-                    Toast.makeText(LoginActivity.this, "Email/Password errado | timeout", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Ocorreu algum erro, visita o nosso website para mais detalhes.", Toast.LENGTH_SHORT).show();
                 }
             });
             requestQueue.add(jsonObject);
@@ -173,6 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                 user.saveUserInFile(getApplicationContext());
                 Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
                 startActivity(Index);
+                finish();
             }
         } catch (JSONException e) {
             e.printStackTrace();
