@@ -1,12 +1,15 @@
 package com.example.melic.gymplan;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 /**
@@ -20,12 +23,12 @@ import android.view.ViewGroup;
 public class FinalExericioFrag extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_NrRepeticoesRestantes = "repeticoesRestantes";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private TextView tvRepeticoesEmFalta;
+    private Button btRepetir;
+
+    private int nrRepeticoesRestantes;
 
     private OnFragmentInteractionListener mListener;
 
@@ -40,11 +43,10 @@ public class FinalExericioFrag extends Fragment {
      * @return A new instance of fragment FinalExericioFrag.
      */
     // TODO: Rename and change types and number of parameters
-    public static FinalExericioFrag newInstance() {
+    public static FinalExericioFrag newInstance(int nrRepeticoesRestantes) {
         FinalExericioFrag fragment = new FinalExericioFrag();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, "a");
-        args.putString(ARG_PARAM2, "b");
+        args.putInt(ARG_NrRepeticoesRestantes, nrRepeticoesRestantes);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,8 +55,7 @@ public class FinalExericioFrag extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            nrRepeticoesRestantes = getArguments().getInt(ARG_NrRepeticoesRestantes);
         }
     }
 
@@ -62,7 +63,46 @@ public class FinalExericioFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_final_exericio, container, false);
+        View view = inflater.inflate(R.layout.fragment_final_exericio, container, false);
+
+        tvRepeticoesEmFalta = (TextView)view.findViewById(R.id.tvRepeticoesRestantes);
+        btRepetir = (Button)view.findViewById(R.id.btRepetirTreino);
+
+        if (nrRepeticoesRestantes == 0){
+            tvRepeticoesEmFalta.setText("Já acabou o treino. Parabéns!");
+            btRepetir.setText("Voltar ao menu principal");
+        }else{
+            tvRepeticoesEmFalta.setText("Repetições em falta: " + nrRepeticoesRestantes);
+            btRepetir.setText("Voltar ao primeiro exercicio");
+        }
+
+        btRepetir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nrRepeticoesRestantes == 0){
+                    Intent Index = new Intent(getActivity(),IndexActivity.class);
+                    startActivity(Index);
+                    getActivity().finish();
+                }else{
+                    ((TreinoActivity)getContext()).setViewPagerIndex(0);
+                }
+            }
+        });
+
+
+        return view;
+    }
+
+    public void setNrRepeticoesRestantes(int nr){
+
+        if (nrRepeticoesRestantes == 0){
+            tvRepeticoesEmFalta.setText("Já acabou o treino. Parabéns!");
+            btRepetir.setText("Voltar ao menu principal");
+        }else{
+            tvRepeticoesEmFalta.setText("Repetições em falta: " + nrRepeticoesRestantes);
+            btRepetir.setText("Voltar ao primeiro exercicio");
+        }
+        this.nrRepeticoesRestantes = nr;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

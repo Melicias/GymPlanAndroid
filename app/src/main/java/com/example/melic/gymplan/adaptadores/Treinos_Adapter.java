@@ -12,8 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.melic.gymplan.IndexActivity;
 import com.example.melic.gymplan.R;
+import com.example.melic.gymplan.classes.ModeloBDHelper;
+import com.example.melic.gymplan.classes.SingletonData;
 import com.example.melic.gymplan.classes.Treino;
 import com.example.melic.gymplan.exerciciosFrag;
 import com.example.melic.gymplan.menuTreinos;
@@ -49,7 +53,7 @@ public class Treinos_Adapter extends
     }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Treino treino = this.treinos.get(i);
+        final Treino treino = this.treinos.get(i);
 
         TextView Nome = viewHolder.tvNome;
         TextView Categoria = viewHolder.tvCategoria;
@@ -67,12 +71,30 @@ public class Treinos_Adapter extends
 
         if(escolha == menuTreinos.MENU){
             ibSave.setVisibility(View.VISIBLE);
+            ibSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ModeloBDHelper modeloDB = SingletonData.getInstance(context,escolha).getModeloDB();
+                    modeloDB.guardarTreino(treino);
+                    Toast.makeText(context, "Treino guardado nos seus treinos!", Toast.LENGTH_SHORT).show();
+                }
+            });
         }else{
             ibRemover.setVisibility(View.VISIBLE);
+            ibRemover.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ModeloBDHelper modeloDB = SingletonData.getInstance(context,escolha).getModeloDB();
+                    modeloDB.removerTreino(treino);
+                    //update
+                    menuTreinos frag = (menuTreinos) ((IndexActivity)context).getSupportFragmentManager().findFragmentByTag("meusTreinos");
+                    frag.updateAfterAddRemove();
+                    removeUpdate(treino);
+                    Toast.makeText(context, "Treino removido com sucesso!", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
-
     }
-
 
     public void pesquisaTudo(String nome,int idDificuldade, int idCategoria){
         this.treinos = (ArrayList<Treino>)treinosNew.clone();
@@ -165,5 +187,10 @@ public class Treinos_Adapter extends
                 }
             });
         }
+    }
+
+    public void removeUpdate(Treino treino){
+        this.treinos.remove(treino);
+        notifyDataSetChanged();
     }
 }

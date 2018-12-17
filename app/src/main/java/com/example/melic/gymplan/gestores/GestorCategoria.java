@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.melic.gymplan.IndexActivity;
 import com.example.melic.gymplan.R;
 import com.example.melic.gymplan.classes.CategoriaTreino;
+import com.example.melic.gymplan.classes.ModeloBDHelper;
 import com.example.melic.gymplan.classes.SingletonData;
 
 import org.json.JSONArray;
@@ -35,6 +36,7 @@ public class GestorCategoria {
     private static final String URL = "categoria?access-token=";
 
     private Context context;
+    private ModeloBDHelper modeloDB;
     private String accessToken;
     private ArrayList<CategoriaTreino> categorias;
 
@@ -44,22 +46,32 @@ public class GestorCategoria {
         choice(escolha);
     }
 
-    public GestorCategoria( Context context, int escolha){
+    public GestorCategoria(Context context, int escolha, ModeloBDHelper modeloDB){
+        this.context = context;
+        this.modeloDB = modeloDB;
+        choice(escolha);
+    }
+
+    public GestorCategoria(Context context, int escolha){
         this.context = context;
         choice(escolha);
     }
 
+
     public void choice(int escolha){
         categorias = new ArrayList<>();
         if(escolha == ONLINE){
-            getDataFromAPI();
+            //getDataFromAPI();
         }else{
-            //buscar a base de dados
+            getDadosFromDB();
         }
         if(escolha == 0) {
-            this.categorias = new ArrayList<>();
             adicionarDados();
         }
+    }
+
+    private void getDadosFromDB(){
+        this.categorias = modeloDB.getAllCategorias();
     }
 
     private void adicionarDados(){
@@ -88,7 +100,7 @@ public class GestorCategoria {
         return scategorias;
     }
 
-    private void getDataFromAPI(){
+    /*private void getDataFromAPI(){
         RequestQueue requestQueue = Volley.newRequestQueue(this.context);
         // Initialize a new JsonArrayRequest instance
         String url = context.getResources().getString(R.string.url) + URL + accessToken;
@@ -148,7 +160,7 @@ public class GestorCategoria {
         });
         // Add JsonArrayRequest to the RequestQueue
         requestQueue.add(jsonArrayRequest);
-    }
+    }*/
 
     public CategoriaTreino getCategoriaByID(int id){
         for (CategoriaTreino cat : categorias) {
@@ -160,5 +172,18 @@ public class GestorCategoria {
 
     public void setCategorias(ArrayList<CategoriaTreino>cats){
         this.categorias = cats;
+    }
+
+    public boolean setCategoriaIfNotExists(CategoriaTreino cat){
+        for (CategoriaTreino categoria : categorias) {
+            if(categoria.getId() == cat.getId())
+                return false;
+        }
+        categorias.add(cat);
+        return true;
+    }
+
+    public void removeCategoria(CategoriaTreino cat){
+        this.categorias.remove(cat);
     }
 }

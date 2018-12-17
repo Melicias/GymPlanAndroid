@@ -38,6 +38,7 @@ public class TreinoActivity extends AppCompatActivity  implements exercicioFrag.
     private ViewPager mViewPager;
     private PageIndicatorView pageIndicatorView;
     private Treino treino;
+    private int repeticoesEmFalta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,12 @@ public class TreinoActivity extends AppCompatActivity  implements exercicioFrag.
         setContentView(R.layout.activity_treino);
 
         treino = (Treino)getIntent().getExtras().getSerializable(ARG_PARAM);
+
+        if(treino.getRepeticoes() == 0){
+            repeticoesEmFalta = treino.getRepeticoes() - 1;
+        }else{
+            repeticoesEmFalta = treino.getRepeticoes();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,6 +95,12 @@ public class TreinoActivity extends AppCompatActivity  implements exercicioFrag.
 
     }
 
+    public void setViewPagerIndex(int position){
+        this.mViewPager.setCurrentItem(position);
+        this.repeticoesEmFalta--;
+        mSectionsPagerAdapter.notifyDataSetChanged();
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -103,7 +116,7 @@ public class TreinoActivity extends AppCompatActivity  implements exercicioFrag.
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if(treino.getExercicios().size() == position)
-                return FinalExericioFrag.newInstance();
+                return FinalExericioFrag.newInstance(repeticoesEmFalta);
             return exercicioFrag.newInstance(treino.getExercicio(position));
         }
 
@@ -111,6 +124,14 @@ public class TreinoActivity extends AppCompatActivity  implements exercicioFrag.
         public int getCount() {
             // Show 3 total pages.
             return treino.getExercicios().size()+1;
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            if (object instanceof FinalExericioFrag) {
+                ((FinalExericioFrag) object).setNrRepeticoesRestantes(repeticoesEmFalta);
+            }
+            return POSITION_NONE;
         }
 
     }

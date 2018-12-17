@@ -1,5 +1,6 @@
 package com.example.melic.gymplan.classes;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,8 +11,9 @@ import java.util.ArrayList;
 public class ModeloBDHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "gymplan";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private final SQLiteDatabase database;
+    private Context context;
 
     private static final String TABLE_DIFICULDADE = "Dificuldade";
     private static final String TABLE_CATEGORIA = "Categoria";
@@ -39,6 +41,7 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
 
     public ModeloBDHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        this.context = context;
         this.database = this.getWritableDatabase();
     }
 
@@ -71,7 +74,7 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
                 TEMPO_EXERCICIO + " INTEGER " +
                 ");";
         String createTreinoExercicioTable = "CREATE TABLE " + TABLE_TREINO_EXERCICIO +
-                "( " + ID_TREINO_EXERCICIO + " INTEGER PRIMARY KEY, " +
+                "( " + ID_TREINO_EXERCICIO + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 ID_TREINO_TREINO_EXERCICIO + " INTEGER NOT NULL, " +
                 ID_EXERCICIO_EXERCICIO + " INTEGER NOT NULL, " +
                 "FOREIGN KEY(" + ID_EXERCICIO_EXERCICIO + ") REFERENCES " + TABLE_EXERCICIO + "("+ID_EXERCICIO+")," +
@@ -183,6 +186,126 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         ct = new CategoriaTreino(cursor.getInt(0),cursor.getString(1));
         return ct;
+    }
+
+    private boolean doesCategoriaExist(int idCategoria){
+        Cursor cursor = this.database.rawQuery("SELECT * FROM " + TABLE_CATEGORIA + " WHERE " + ID_CATEGORIA + " = " + idCategoria, null);
+        if(cursor.getCount() == 0)
+            return false;
+        return true;
+    }
+
+    private boolean doesDificuldadeExist(int idDificuldade){
+        Cursor cursor = this.database.rawQuery("SELECT * FROM " + TABLE_DIFICULDADE + " WHERE " + ID_DIFICULDADE + " = " + idDificuldade, null);
+        if(cursor.getCount() == 0)
+            return false;
+        return true;
+    }
+
+    private boolean doesExercicioExist(int idExercicio){
+        Cursor cursor = this.database.rawQuery("SELECT * FROM " + TABLE_EXERCICIO + " WHERE " + ID_EXERCICIO + " = " + idExercicio, null);
+        if(cursor.getCount() == 0)
+            return false;
+        return true;
+    }
+
+    public void guardarTreino(Treino treino){
+        //ADD CATEGORIA
+        if(!doesCategoriaExist(treino.getCategoria().getId())) {
+            ContentValues values = new ContentValues();
+            values.put(ID_CATEGORIA, treino.getCategoria().getId());
+            values.put(NOME_CATEGORIA, treino.getCategoria().getNome());
+            this.database.insert(TABLE_CATEGORIA, null, values);
+            SingletonData.getInstance(context, 1).addCategoriaOffline(treino.getCategoria());
+        }
+
+        //ADD DIFICULDADE
+        if(!doesDificuldadeExist(treino.getCategoria().getId())) {
+            ContentValues values = new ContentValues();
+            values.put(ID_DIFICULDADE, treino.getDificuldade().getId());
+            values.put(DIFICULDADE, treino.getDificuldade().getDificuldade());
+            this.database.insert(DIFICULDADE, null, values);
+            SingletonData.getInstance(context, 1).addDificuldadeOffline(treino.getDificuldade());
+        }
+        //ADD TREINO
+        ContentValues values = new ContentValues();
+        values.put(ID_TREINO, treino.getId());
+        values.put(NOME_TREINO,treino.getNome());
+        values.put(DESCRICAO_TREINO, treino.getDescricao());
+        values.put(REPETICOES_TREINO, treino.getRepeticoes());
+        values.put(ID_CATEGORIA, treino.getCategoria().getId());
+        values.put(ID_DIFICULDADE, treino.getDificuldade().getId());
+        this.database.insert(TABLE_TREINO, null, values);
+        SingletonData.getInstance(context, 1).addTreinoOffline(treino);
+
+        //ADD EXERCICIOS
+        //ADD TREINO_EXERCICIO
+        for(int i = 0;i<treino.getExercicios().size();i++){
+            if(!doesExercicioExist(treino.getExercicio(i).getId())){
+                //ADD EXERCICIO
+                Exercicio e = treino.getExercicio(i);
+                values = new ContentValues();
+                values.put(ID_EXERCICIO, e.getId());
+                values.put(FOTO_EXERCICIO, e.getFoto());
+                values.put(NOME_EXERCICIO, e.getNome());
+                values.put(DESCRICAO_EXERCICIO, e.getDescricao());
+                if(e.getRepeticoes() == 0){
+                    values.put(TEMPO_EXERCICIO, e.getDuracao());
+                }else{
+                    values.put(REPETICOES_EXERCICIO, e.getRepeticoes());
+                }
+                this.database.insert(TABLE_EXERCICIO, null, values);
+            }
+            values = new ContentValues();
+            values.put(ID_TREINO_TREINO_EXERCICIO, treino.getId());
+            values.put(ID_EXERCICIO_EXERCICIO, treino.getExercicio(i).getId());
+            this.database.insert(TABLE_TREINO_EXERCICIO, null, values);
+        }
+
+    }
+
+    public void removerTreino(Treino treino) {
+        //DELETE TREINO_EXERCICIO
+        this.database.delete(TABLE_TREINO_EXERCICIO, ID_TREINO + " = ?", new String[]{"" + treino.getId()});
+        //DELETE TREINO
+        this.database.delete(TABLE_TREINO, ID_TREINO + " = ?", new String[]{"" + treino.getId()});
+        SingletonData.getInstance(context,0).removeTreino(treino);
+        //DELETE CATEGORIA
+        if (!doesCategoriaHaveTreinos(treino.getCategoria().getId())) {
+            this.database.delete(TABLE_CATEGORIA, ID_CATEGORIA + " = ?", new String[]{"" + treino.getCategoria().getId()});
+            SingletonData.getInstance(context,0).removeCategoria(treino.getCategoria());
+        }
+         //DELETE DIFICULDADE
+        if (!doesDificuldadeHaveTreinos(treino.getDificuldade().getId())) {
+            this.database.delete(TABLE_DIFICULDADE, ID_DIFICULDADE + " = ?", new String[]{"" + treino.getDificuldade().getId()});
+            SingletonData.getInstance(context,0).removeDificuldade(treino.getDificuldade());
+        }
+        //DELETE EXERCICIO
+        for (int i = 0; i < treino.getExercicios().size(); i++) {
+            if (!doesExerciciosHaveTreinos(treino.getExercicio(i).getId()))
+                this.database.delete(TABLE_EXERCICIO, ID_EXERCICIO + " = ?", new String[]{"" + treino.getExercicio(i)});
+        }
+    }
+
+    private boolean doesCategoriaHaveTreinos(int idCategoria){
+        Cursor cursor = this.database.rawQuery("SELECT 1 FROM " + TABLE_TREINO + " WHERE " + ID_CATEGORIA + " = " + idCategoria, null);
+        if(cursor.getCount() == 0)
+            return false;
+        return true;
+    }
+
+    private boolean doesDificuldadeHaveTreinos(int idDificuldade){
+        Cursor cursor = this.database.rawQuery("SELECT 1 FROM " + TABLE_TREINO + " WHERE " + ID_DIFICULDADE + " = " + idDificuldade, null);
+        if(cursor.getCount() == 0)
+            return false;
+        return true;
+    }
+
+    private boolean doesExerciciosHaveTreinos(int idExercicio){
+        Cursor cursor = this.database.rawQuery("SELECT 1 FROM " + TABLE_TREINO_EXERCICIO + " WHERE " + ID_EXERCICIO + " = " + idExercicio, null);
+        if(cursor.getCount() == 0)
+            return false;
+        return true;
     }
 
 }

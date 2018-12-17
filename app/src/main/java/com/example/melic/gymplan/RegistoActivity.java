@@ -93,7 +93,7 @@ public class RegistoActivity extends AppCompatActivity {
                                     SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     User user = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
                                             in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
-                                            response.getInt("sexo"),response.getString("auth_key"));
+                                            response.getInt("sexo"),response.getString("auth_key"),response.getString("email"));
                                     user.saveUserInFile(getApplicationContext());
                                     Intent Index = new Intent(RegistoActivity.this,IndexActivity.class);
                                     startActivity(Index);
@@ -195,43 +195,47 @@ public class RegistoActivity extends AppCompatActivity {
                             if(this.etPeso.getText().toString().length() != 0){
                                 if(this.etPassword.getText().toString().length() >= 6){
                                     if(getAge() >= 12){
-                                        if(this.etPassword.getText().toString().equals(this.etPasswordRepetida.getText().toString())){
-                                            try{
-                                                Double altura = Double.parseDouble(this.etAltura.getText().toString());
-                                                Double peso = Double.parseDouble(this.etPeso.getText().toString());
+                                        if(getAge()<= 122) {
+                                            if (this.etPassword.getText().toString().equals(this.etPasswordRepetida.getText().toString())) {
+                                                try {
+                                                    Double altura = Double.parseDouble(this.etAltura.getText().toString());
+                                                    Double peso = Double.parseDouble(this.etPeso.getText().toString());
 
-                                                String[] splitterAltura = altura.toString().split("\\.");
-                                                if(splitterAltura.length==2){
-                                                    if(splitterAltura[0].length() >= 1 && splitterAltura[1].length() >= 1 && splitterAltura[0].length() <= 2 && splitterAltura[1].length() <= 2){
-                                                        String[] splitterPeso = peso.toString().split("\\.");
-                                                        if(splitterPeso.length==2){
-                                                            if(splitterPeso[0].length() >= 1 && splitterPeso[1].length() >= 1 && splitterPeso[0].length() <= 3 && splitterPeso[1].length() <= 3){
-                                                                if(altura >= 1 && altura <= 2.50){
-                                                                    if(peso >= 25 && peso <= 300){
-                                                                        return true;
-                                                                    }else{
-                                                                        Toast.makeText(getApplicationContext(), "O peso deverá ser superior a 25 kg e inferior a 300 kg", Toast.LENGTH_LONG).show();
+                                                    String[] splitterAltura = altura.toString().split("\\.");
+                                                    if (splitterAltura.length == 2) {
+                                                        if (splitterAltura[0].length() >= 1 && splitterAltura[1].length() >= 1 && splitterAltura[0].length() <= 2 && splitterAltura[1].length() <= 2) {
+                                                            String[] splitterPeso = peso.toString().split("\\.");
+                                                            if (splitterPeso.length == 2) {
+                                                                if (splitterPeso[0].length() >= 1 && splitterPeso[1].length() >= 1 && splitterPeso[0].length() <= 3 && splitterPeso[1].length() <= 3) {
+                                                                    if (altura >= 1 && altura <= 2.50) {
+                                                                        if (peso >= 25 && peso <= 300) {
+                                                                            return true;
+                                                                        } else {
+                                                                            Toast.makeText(getApplicationContext(), "O peso deverá ser superior a 25 kg e inferior a 300 kg", Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                    } else {
+                                                                        Toast.makeText(getApplicationContext(), "A altura deverá ser superior a 1 metro e inferior a 2.50 metros", Toast.LENGTH_LONG).show();
                                                                     }
-                                                                }else{
-                                                                    Toast.makeText(getApplicationContext(), "A altura deverá ser superior a 1 metro e inferior a 2.50 metros", Toast.LENGTH_LONG).show();
+                                                                } else {
+                                                                    Toast.makeText(getApplicationContext(), "O formato da altura deve ser como o seguinte exemplo: 70.80 ou 71", Toast.LENGTH_LONG).show();
                                                                 }
-                                                            }else{
-                                                                Toast.makeText(getApplicationContext(), "O formato da altura deve ser como o seguinte exemplo: 70.80 ou 71", Toast.LENGTH_LONG).show();
+                                                            } else {
+                                                                Toast.makeText(getApplicationContext(), "Peso inválido", Toast.LENGTH_LONG).show();
                                                             }
-                                                        }else{
-                                                            Toast.makeText(getApplicationContext(), "Peso inválido", Toast.LENGTH_LONG).show();
+                                                        } else {
+                                                            Toast.makeText(getApplicationContext(), "O formato da altura deve ser como o seguinte exemplo: 1.80", Toast.LENGTH_LONG).show();
                                                         }
-                                                    }else{
-                                                        Toast.makeText(getApplicationContext(), "O formato da altura deve ser como o seguinte exemplo: 1.80", Toast.LENGTH_LONG).show();
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(), "Altura inválida", Toast.LENGTH_LONG).show();
                                                     }
-                                                }else{
-                                                    Toast.makeText(getApplicationContext(), "Altura inválida", Toast.LENGTH_LONG).show();
+                                                } catch (IllegalArgumentException ex) {
+                                                    Toast.makeText(getApplicationContext(), "Erro a converter", Toast.LENGTH_LONG).show();
                                                 }
-                                            }catch(IllegalArgumentException ex){
-                                                Toast.makeText(getApplicationContext(), "Erro a converter", Toast.LENGTH_LONG).show();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "As duas passwords não coincidem", Toast.LENGTH_LONG).show();
                                             }
                                         }else{
-                                            Toast.makeText(getApplicationContext(), "As duas passwords não coincidem", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), "122 anos e 164 dias - esta é a idade da pessoa mais velha do mundo, se tens mais que esta idade contacta a nossa staff", Toast.LENGTH_LONG).show();
                                         }
                                     }else{
                                         Toast.makeText(getApplicationContext(), "Idade insuficiente. Têm de ter no minimo 12 anos", Toast.LENGTH_LONG).show();

@@ -32,7 +32,7 @@ public class User implements Serializable {
 
     private static String FILE_NAME = "user";
 
-    public User(int id, String primeiroNome, String ultimoNome, Date dataNascimento, double altura, double peso, int sexo, String auth_key){
+    public User(int id, String primeiroNome, String ultimoNome, Date dataNascimento, double altura, double peso, int sexo, String auth_key,String email){
         this.id = id;
         this.primeiroNome = primeiroNome;
         this.ultimoNome = ultimoNome;
@@ -41,6 +41,7 @@ public class User implements Serializable {
         this.peso = peso;
         this.sexo = sexo;
         this.auth_key = auth_key;
+        this.email = email;
     }
 
     public User(){
@@ -108,4 +109,6 @@ public class User implements Serializable {
     public int getId(){
         return this.id;
     }
+
+    public String getEmail(){return this.email;}
 }

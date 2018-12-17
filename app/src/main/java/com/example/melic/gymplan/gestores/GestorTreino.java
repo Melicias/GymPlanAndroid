@@ -12,9 +12,13 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.melic.gymplan.IndexActivity;
 import com.example.melic.gymplan.R;
+import com.example.melic.gymplan.classes.CategoriaTreino;
+import com.example.melic.gymplan.classes.DificuldadeTreino;
 import com.example.melic.gymplan.classes.Exercicio;
+import com.example.melic.gymplan.classes.ModeloBDHelper;
 import com.example.melic.gymplan.classes.SingletonData;
 import com.example.melic.gymplan.classes.Treino;
+import com.example.melic.gymplan.menuTreinos;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,10 +36,12 @@ public class GestorTreino {
     public static final int ONLINE = 1;
     public static final int OFFLINE = 2;
 
-    private static final String URL = "treino/exercicios?access-token=";
+    //private static final String URL = "treino/exercicios?access-token=";
+    private static final String URL = "treino/exercicioscd?access-token=";
 
     private Context context;
     private String accessToken;
+    private ModeloBDHelper modeloDB;
     private ArrayList<Treino> treinos;
 
     public GestorTreino(Context context, int escolha){
@@ -49,17 +55,28 @@ public class GestorTreino {
         choice(escolha);
     }
 
+    public GestorTreino(Context context, int escolha, ModeloBDHelper modeloDB){
+        this.context = context;
+        this.modeloDB = modeloDB;
+        choice(escolha);
+    }
+
     public void choice(int escolha){
         treinos = new ArrayList<>();
         if(escolha == ONLINE){
-            getDataFromAPI();
+            //getDataFromAPI();
+            getAllDataFromAPI();
         }else{
-            //buscar a base de dados
+            getDadosFromDB();
         }
-        if(escolha == 0) {
+        if(escolha == TESTE) {
             this.treinos = new ArrayList<>();
             adicionarDados();
         }
+    }
+
+    private void getDadosFromDB(){
+        this.treinos = modeloDB.getAllTreinos();
     }
 
     private void adicionarDados(){
@@ -86,7 +103,114 @@ public class GestorTreino {
         return this.treinos.get(index);
     }
 
-    private void getDataFromAPI(){
+    private void getAllDataFromAPI(){
+        // Initialize a new RequestQueue instance
+        RequestQueue requestQueue = Volley.newRequestQueue(this.context);
+        IndexActivity act = (IndexActivity)context;
+        // Initialize a new JsonArrayRequest instance
+        String url = context.getResources().getString(R.string.url) + URL + accessToken;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Process the JSON
+                        try{
+                            // Loop through the array elements
+                            menuTreinos fragment =(menuTreinos) ((IndexActivity) context).getSupportFragmentManager().findFragmentByTag("menuTreinos");
+                            for(int i=0;i<response.length();i++){
+                                //GestorCategoria categorias = SingletonData.getInstance(context, GestorCategoria.ONLINE).getGestorCategorias(GestorCategoria.ONLINE);
+                                //GestorDificuldade dificuldades = SingletonData.getInstance(context, GestorDificuldade.ONLINE).getGestorDificuldades(GestorDificuldade.ONLINE);
+
+                                // Get current json object
+                                JSONObject obj = response.getJSONObject(i);
+
+                                //get treino
+                                JSONObject tre = obj.getJSONObject("treino");
+                                int id = tre.getInt("id_treino");
+                                String nome = tre.getString("nome");
+                                String descricao = tre.getString("descricao");
+                                int repeticoes = tre.getInt("repeticoes");
+                                //get categoria
+                                JSONObject cat = obj.getJSONObject("categoria");
+                                int id_categoria = cat.getInt("id_categoria");
+                                String nomeCategoria = cat.getString("nome");
+                                //get dificuldade
+                                JSONObject dif = obj.getJSONObject("dificuldade");
+                                int id_dificuldade = dif.getInt("id_dificuldade");
+                                int dificuldade = dif.getInt("dificuldade");
+
+                                CategoriaTreino c = new CategoriaTreino(id_categoria,nomeCategoria);
+                                DificuldadeTreino d = new DificuldadeTreino(id_dificuldade,dificuldade);
+                                //Treino treino = new Treino(id,nome,descricao,repeticoes,dificuldades.getDificuldadeByID(id_dificuldade),categorias.getCategoriaByID(id_categoria));
+                                Treino treino = new Treino(id,nome,descricao,repeticoes,d,c);
+
+                                SingletonData.getInstance(context, GestorCategoria.ONLINE).setCategoriaOnline(c);
+                                SingletonData.getInstance(context, GestorCategoria.ONLINE).setDificuldadeOnline(d);
+
+                                JSONArray exer = obj.getJSONArray("exercicios");
+                                ArrayList<Exercicio> exercicios = new ArrayList<>();
+                                for(int j=0;j<exer.length();j++){
+                                    Log.d("treino", "j" + j);
+                                    JSONObject obj2 = exer.getJSONObject(j);
+                                    int id_exercicio = obj2.getInt("id_exercicio");
+                                    String foto = obj2.getString("foto");
+                                    nome = obj2.getString("nome");
+                                    descricao = obj2.getString("descricao");
+                                    Exercicio e;
+                                    if(!obj2.isNull("repeticoes")){
+                                        repeticoes = obj2.getInt("repeticoes");
+                                        e = new Exercicio(id_exercicio,foto,nome,descricao,repeticoes,true);
+                                    }else{
+                                        int tempo = obj2.getInt("tempo");
+                                        e = new Exercicio(id_exercicio,foto,nome,descricao,tempo,false);
+                                    }
+                                    exercicios.add(e);
+                                }
+                                treino.setExercicios(exercicios);
+                                treinos.add(treino);
+                            }
+                            SingletonData.getInstance(context, GestorTreino.ONLINE).setTreinos(treinos);
+                            ((IndexActivity)context).progressBar(false);
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                            Log.d("treino", "OLA2");
+                            ((IndexActivity)context).progressBar(false);
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        Log.d("treino", "OLA3");
+                        ((IndexActivity)context).progressBar(false);
+                    }
+                }
+        );
+
+        jsonArrayRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 25000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 25000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+                Log.d("treino", "ERRO: asd treino");
+            }
+        });
+        // Add JsonArrayRequest to the RequestQueue
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    /*private void getDataFromAPI(){
         // Initialize a new RequestQueue instance
         RequestQueue requestQueue = Volley.newRequestQueue(this.context);
 
@@ -178,9 +302,19 @@ public class GestorTreino {
         });
         // Add JsonArrayRequest to the RequestQueue
         requestQueue.add(jsonArrayRequest);
-    }
+    }*/
+
+
 
     public void setTreinos(ArrayList<Treino>tres){
         this.treinos = tres;
+    }
+
+    public void addTreino(Treino treino){
+        this.treinos.add(treino);
+    }
+
+    public void removeTreino(Treino treino){
+        this.treinos.remove(treino);
     }
 }

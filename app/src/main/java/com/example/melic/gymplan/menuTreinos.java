@@ -56,8 +56,11 @@ public class menuTreinos extends Fragment {
 
     // TODO: Rename and change types of parameters
     private int escolha;
+    private RecyclerView rvTreinos;
     private Spinner spDificuldade;
     private Spinner spCategoria;
+    private Button btRederecionarMenuTreinos;
+    private ConstraintLayout clTreinos;
 
 
     private OnFragmentInteractionListener mListener;
@@ -96,7 +99,7 @@ public class menuTreinos extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_treinos, container, false);
 
-        RecyclerView rvTreinos =(RecyclerView)view.findViewById(R.id.rvTreinos);
+        rvTreinos =(RecyclerView)view.findViewById(R.id.rvTreinos);
         ProgressBar progressBar =(ProgressBar) view.findViewById(R.id.pbMenuTreinos);
         // Initialize contacts
         if(this.escolha == MENU){
@@ -112,21 +115,21 @@ public class menuTreinos extends Fragment {
             /*GestorTreino gt = new GestorTreino(0);
             this.treinos = gt.getTreinos();*/
         }
+        clTreinos = (ConstraintLayout)view.findViewById(R.id.clTreinos);
+        btRederecionarMenuTreinos = (Button)view.findViewById(R.id.btRederecionarMenuTreinos);
+        btRederecionarMenuTreinos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((IndexActivity)getActivity()).mudarParaMenuTreino(R.id.nav_todosTreinos);
+            }
+        });
         if(this.treinos.size() == 0){
-            ConstraintLayout cl = (ConstraintLayout)view.findViewById(R.id.clTreinos);
-            cl.setVisibility(view.GONE);
+            clTreinos.setVisibility(view.GONE);
             if(this.escolha == MENU){
                 TextView tv = (TextView)view.findViewById(R.id.tvNaoHaTreinos);
                 tv.setVisibility(view.VISIBLE);
             }else{
-                Button btRederecionarMenuTreinos = (Button)view.findViewById(R.id.btRederecionarMenuTreinos);
                 btRederecionarMenuTreinos.setVisibility(view.VISIBLE);
-                btRederecionarMenuTreinos.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ((IndexActivity)getActivity()).mudarParaMenuTreino(R.id.nav_todosTreinos);
-                    }
-                });
             }
         }else{
             final Treinos_Adapter AdaptadorTreinos = new Treinos_Adapter(treinos, escolha);
@@ -186,7 +189,6 @@ public class menuTreinos extends Fragment {
                     return view;
                 }
             };
-
             this.spCategoria =(Spinner)view.findViewById(R.id.spCategorias);
             spinnerArrayAdapterCategoria.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             spCategoria.setAdapter(spinnerArrayAdapterCategoria);
@@ -245,6 +247,13 @@ public class menuTreinos extends Fragment {
         return view;
     }
 
+    public void updateAfterAddRemove(){
+        this.treinos = SingletonData.getInstance(getActivity(), MEU).getTreinosArray(MEU);
+        if(this.treinos.size() == 0){
+            clTreinos.setVisibility(View.GONE);
+            btRederecionarMenuTreinos.setVisibility(View.VISIBLE);
+        }
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

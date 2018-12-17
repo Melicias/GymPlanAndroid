@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.melic.gymplan.classes.User;
 
@@ -59,6 +60,12 @@ public class IndexActivity extends AppCompatActivity
 
         navigationView.setCheckedItem(R.id.nav_meusPlanos);
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_meusPlanos));
+
+        TextView tv = (TextView)navigationView.getHeaderView(0).findViewById(R.id.tvEmailNavHeader);
+        User u = new User();
+        u = u.getUserFromFile(this);
+        tv.setText(u.getEmail());
+
         this.first = false;
     }
 

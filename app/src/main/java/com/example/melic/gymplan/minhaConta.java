@@ -249,7 +249,7 @@ public class minhaConta extends Fragment {
                             try {
                                 User u = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
                                         in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
-                                        response.getInt("sexo"),response.getString("auth_key"));
+                                        response.getInt("sexo"),response.getString("auth_key"),response.getString("email"));
                                 user = u;
                                 user.saveUserInFile(getActivity());
                                 etPrimeiroNome.setText(user.getPrimeiroNome());

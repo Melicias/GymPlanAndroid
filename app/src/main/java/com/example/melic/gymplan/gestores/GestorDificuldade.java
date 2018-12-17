@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.melic.gymplan.IndexActivity;
 import com.example.melic.gymplan.R;
 import com.example.melic.gymplan.classes.DificuldadeTreino;
+import com.example.melic.gymplan.classes.ModeloBDHelper;
 import com.example.melic.gymplan.classes.SingletonData;
 
 import org.json.JSONArray;
@@ -36,7 +37,14 @@ public class GestorDificuldade {
 
     private Context context;
     private String accessToken;
+    private ModeloBDHelper modeloDB;
     private ArrayList<DificuldadeTreino> dificuldades;
+
+    public GestorDificuldade(Context context, int escolha, ModeloBDHelper modeloDB) {
+        this.context = context;
+        this.modeloDB = modeloDB;
+        choice(escolha);
+    }
 
     public GestorDificuldade(Context context, int escolha){
         this.context = context;
@@ -52,14 +60,17 @@ public class GestorDificuldade {
     public void choice(int escolha){
         dificuldades = new ArrayList<>();
         if(escolha == ONLINE){
-            getDataFromAPI();
+            //getDataFromAPI();
         }else{
-            //buscar a base de dados
+            getDadosFromDB();
         }
         if(escolha == 0){
-            this.dificuldades = new ArrayList<>();
             adicionarDados();
         }
+    }
+
+    private void getDadosFromDB(){
+        this.dificuldades = modeloDB.getAllDificuldades();
     }
 
     private void adicionarDados(){
@@ -93,7 +104,7 @@ public class GestorDificuldade {
         return sdificuldades;
     }
 
-    private void getDataFromAPI(){
+    /*private void getDataFromAPI(){
         // Initialize a new RequestQueue instance
         RequestQueue requestQueue = Volley.newRequestQueue(this.context);
 
@@ -153,7 +164,7 @@ public class GestorDificuldade {
         });
         // Add JsonArrayRequest to the RequestQueue
         requestQueue.add(jsonArrayRequest);
-    }
+    }*/
 
     public DificuldadeTreino getDificuldadeByID(int id){
         for (DificuldadeTreino dif : dificuldades) {
@@ -163,8 +174,20 @@ public class GestorDificuldade {
         return new DificuldadeTreino(0,0);
     }
 
+    public boolean setDificuldadIfNotExists(DificuldadeTreino dif){
+        for (DificuldadeTreino dificuldade : dificuldades) {
+            if(dificuldade.getId() == dif.getId())
+                return false;
+        }
+        dificuldades.add(dif);
+        return true;
+    }
+
     public void setDificuldades(ArrayList<DificuldadeTreino>difs){
         this.dificuldades = difs;
     }
 
+    public void removeDificuldade(DificuldadeTreino dif){
+        this.dificuldades.remove(dif);
+    }
 }

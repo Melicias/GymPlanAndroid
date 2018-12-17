@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class SingletonData {
 
     private static SingletonData INSTANCE = null;
+    private static ModeloBDHelper modeloDB = null;
     private int escolha;
     private Context context;
 
@@ -50,13 +51,16 @@ public class SingletonData {
 
         reloadArraysOnline();
 
+        if(modeloDB == null)
+            modeloDB = new ModeloBDHelper(context);
+
         realoadArraysOffline();
     }
 
     public void realoadArraysOffline(){
-        this.gestorCategoriasOffline = new GestorCategoria(context, GestorCategoria.OFFLINE);
-        this.gestorDificuldadesOffline = new GestorDificuldade(context, GestorDificuldade.OFFLINE);
-        this.gestorTreinoOffline = new GestorTreino(context, GestorTreino.OFFLINE);
+        this.gestorCategoriasOffline = new GestorCategoria(context, GestorCategoria.OFFLINE, modeloDB);
+        this.gestorDificuldadesOffline = new GestorDificuldade(context, GestorDificuldade.OFFLINE, modeloDB);
+        this.gestorTreinoOffline = new GestorTreino(context, GestorTreino.OFFLINE,modeloDB);
 
     }
 
@@ -65,8 +69,6 @@ public class SingletonData {
         this.gestorCategoriasOnline = new GestorCategoria(context, GestorCategoria.ONLINE,this.user.getAuth_key());
         this.gestorDificuldadesOnline = new GestorDificuldade(context, GestorDificuldade.ONLINE,this.user.getAuth_key());
         this.gestorTreinoOnline = new GestorTreino(context, GestorTreino.ONLINE,this.user.getAuth_key());
-
-
     }
 
     public GestorCategoria getGestorCategorias(int escolha){
@@ -111,10 +113,19 @@ public class SingletonData {
 
     public void setDificuldades(ArrayList<DificuldadeTreino>difs){
         this.gestorDificuldadesOnline.setDificuldades(difs);
+        //this.gestorTreinoOnline = new GestorTreino(context, GestorTreino.ONLINE,this.user.getAuth_key());
     }
 
     public void setTreinos(ArrayList<Treino>tres){
         this.gestorTreinoOnline.setTreinos(tres);
+    }
+
+    public boolean setCategoriaOnline(CategoriaTreino cat){
+        return this.gestorCategoriasOnline.setCategoriaIfNotExists(cat);
+    }
+
+    public boolean setDificuldadeOnline(DificuldadeTreino dif){
+        return this.gestorDificuldadesOnline.setDificuldadIfNotExists(dif);
     }
 
     public User getUser() {
@@ -125,4 +136,31 @@ public class SingletonData {
         return this.user.getAuth_key();
     }
 
+    public ModeloBDHelper getModeloDB(){
+        return modeloDB;
+    }
+
+    public void addCategoriaOffline(CategoriaTreino ct){
+        this.gestorCategoriasOffline.setCategoriaIfNotExists(ct);
+    }
+
+    public void addDificuldadeOffline(DificuldadeTreino dt){
+        this.gestorDificuldadesOffline.setDificuldadIfNotExists(dt);
+    }
+
+    public void addTreinoOffline(Treino treino){
+        this.gestorTreinoOffline.addTreino(treino);
+    }
+
+    public void removeCategoria(CategoriaTreino cat){
+        this.gestorCategoriasOffline.removeCategoria(cat);
+    }
+
+    public void removeDificuldade(DificuldadeTreino dif){
+        this.gestorDificuldadesOffline.removeDificuldade(dif);
+    }
+
+    public void removeTreino(Treino treino){
+        this.gestorTreinoOffline.removeTreino(treino);
+    }
 }

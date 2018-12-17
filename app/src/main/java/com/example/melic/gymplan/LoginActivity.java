@@ -131,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
         User user = new User();
         user = user.getUserFromFile(this);
         if(user.getAuth_key() != null){
+            this.etEmail.setText(user.getEmail());
             //pedido a bd e login
             final ProgressBar pb = (ProgressBar) findViewById(R.id.pbLogin);
             final ConstraintLayout cl = (ConstraintLayout)findViewById(R.id.clLogin);
@@ -173,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
             }else{
                 User user = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
                         in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
-                        response.getInt("sexo"),response.getString("auth_key"));
+                        response.getInt("sexo"),response.getString("auth_key"),response.getString("email"));
                 user.saveUserInFile(getApplicationContext());
                 Intent Index = new Intent(LoginActivity.this,IndexActivity.class);
                 startActivity(Index);
