@@ -1,6 +1,9 @@
 package com.example.melic.gymplan;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         this.btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                NetError();
                 if (checkValues()) {
                     efetuarLogin(etEmail.getText().toString(),etPassword.getText().toString());
                 }
@@ -64,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
-
         checkForLogin();
     }
 
@@ -185,6 +188,15 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+    }
+    private void NetError() {
+        if (com.androidstudy.checknetworkconnection.NetStatus.getInstance(getApplicationContext()).isOnline()) {
+            Toast.makeText(getApplicationContext(), "Login feito com sucesso", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getBaseContext(), IndexActivity.class);
+            startActivity(i);
+        } else {
+            Toast.makeText(getApplicationContext(), "Sem internet, por favor conecte-se a uma rede", Toast.LENGTH_SHORT).show();
         }
     }
 }
