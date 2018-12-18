@@ -21,6 +21,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.melic.gymplan.classes.ModeloBDHelper;
+import com.example.melic.gymplan.classes.SingletonData;
 import com.example.melic.gymplan.classes.User;
 
 
@@ -130,6 +132,9 @@ public class IndexActivity extends AppCompatActivity
             Intent i = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(i);
             finish();
+        } else if (id == R.id.nav_AtualizarTreinosLocal) {
+            ModeloBDHelper modeloDB = SingletonData.getInstance(getApplicationContext(),0).getModeloDB();
+            modeloDB.updateDBFromApi();
         }
 
         if (fragment != null) {

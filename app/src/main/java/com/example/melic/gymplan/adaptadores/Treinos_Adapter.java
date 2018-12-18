@@ -75,8 +75,13 @@ public class Treinos_Adapter extends
                 @Override
                 public void onClick(View view) {
                     ModeloBDHelper modeloDB = SingletonData.getInstance(context,escolha).getModeloDB();
-                    modeloDB.guardarTreino(treino);
-                    Toast.makeText(context, "Treino guardado nos seus treinos!", Toast.LENGTH_SHORT).show();
+                    boolean guardou = modeloDB.guardarTreino(treino);
+                    if(guardou){
+                        Toast.makeText(context, "Treino guardado nos seus treinos!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context, "Treino ja disponivel nos seus treinos.", Toast.LENGTH_SHORT).show();
+
+                    }
                 }
             });
         }else{
