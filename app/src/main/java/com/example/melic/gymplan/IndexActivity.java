@@ -20,8 +20,10 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.melic.gymplan.classes.ModeloBDHelper;
+import com.example.melic.gymplan.classes.NetStatus;
 import com.example.melic.gymplan.classes.SingletonData;
 import com.example.melic.gymplan.classes.User;
 
@@ -133,8 +135,15 @@ public class IndexActivity extends AppCompatActivity
             startActivity(i);
             finish();
         } else if (id == R.id.nav_AtualizarTreinosLocal) {
-            ModeloBDHelper modeloDB = SingletonData.getInstance(getApplicationContext(),0).getModeloDB();
-            modeloDB.updateDBFromApi();
+            if(NetStatus.getInstance(this).isOnline()) {
+                ModeloBDHelper modeloDB = SingletonData.getInstance(getApplicationContext(),0).getModeloDB();
+                modeloDB.updateDBFromApi();
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                navigationView.setCheckedItem(R.id.nav_meusPlanos);
+            }else{
+                Toast.makeText(this, "Não existe uma ligação a internet!", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
         if (fragment != null) {

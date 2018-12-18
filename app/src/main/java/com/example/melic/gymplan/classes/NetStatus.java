@@ -1,4 +1,4 @@
-package com.androidstudy.checknetworkconnection;
+package com.example.melic.gymplan.classes;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

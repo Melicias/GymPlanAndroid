@@ -15,13 +15,13 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.melic.gymplan.classes.NetStatus;
 import com.example.melic.gymplan.classes.User;
 
 import org.json.JSONException;
@@ -68,61 +68,63 @@ public class RegistoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (checkValues()) {
-                    NetError();
-                    final ProgressBar pb = (ProgressBar) findViewById(R.id.progressBarRegisto);
-                    final ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.clRegisto);
-                    try {
-                        JSONObject jsonBody = new JSONObject();
-                        jsonBody.put("primeiroNome", etPrimeiroNome.getText());
-                        jsonBody.put("ultimoNome", etUltimoNome.getText());
-                        jsonBody.put("email", etEmail.getText());
-                        jsonBody.put("data", etData.getText());
-                        jsonBody.put("peso", Double.parseDouble(etPeso.getText().toString()));
-                        jsonBody.put("altura", Double.parseDouble(etAltura.getText().toString()));
-                        jsonBody.put("sexo", getSexo());
-                        jsonBody.put("password", etPassword.getText());
+                    if(NetStatus.getInstance(getApplicationContext()).isOnline()) {
+                        final ProgressBar pb = (ProgressBar) findViewById(R.id.progressBarRegisto);
+                        final ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.clRegisto);
+                        try {
+                            JSONObject jsonBody = new JSONObject();
+                            jsonBody.put("primeiroNome", etPrimeiroNome.getText());
+                            jsonBody.put("ultimoNome", etUltimoNome.getText());
+                            jsonBody.put("email", etEmail.getText());
+                            jsonBody.put("data", etData.getText());
+                            jsonBody.put("peso", Double.parseDouble(etPeso.getText().toString()));
+                            jsonBody.put("altura", Double.parseDouble(etAltura.getText().toString()));
+                            jsonBody.put("sexo", getSexo());
+                            jsonBody.put("password", etPassword.getText());
 
-                        pb.setVisibility(View.VISIBLE);
-                        cl.setEnabled(false);
-                        JsonObjectRequest jsonObject = new JsonObjectRequest(
-                                Request.Method.POST,
-                                getResources().getString(R.string.url) + URL,
-                                jsonBody,
-                                new Response.Listener<JSONObject>() {
-                                    public void onResponse(JSONObject response) {
-                                        try {
-                                            SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                            User user = new User(response.getInt("id"), response.getString("primeiroNome"), response.getString("ultimoNome"),
-                                                    in.parse(response.getString("dataNascimento")), response.getDouble("altura"), response.getDouble("peso"),
-                                                    response.getInt("sexo"), response.getString("auth_key"), response.getString("email"));
-                                            user.saveUserInFile(getApplicationContext());
-                                            Intent Index = new Intent(RegistoActivity.this, IndexActivity.class);
-                                            startActivity(Index);
-                                            finish();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                            Toast.makeText(RegistoActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
+                            pb.setVisibility(View.VISIBLE);
+                            cl.setEnabled(false);
+                            JsonObjectRequest jsonObject = new JsonObjectRequest(
+                                    Request.Method.POST,
+                                    getResources().getString(R.string.url) + URL,
+                                    jsonBody,
+                                    new Response.Listener<JSONObject>() {
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                                User user = new User(response.getInt("id"), response.getString("primeiroNome"), response.getString("ultimoNome"),
+                                                        in.parse(response.getString("dataNascimento")), response.getDouble("altura"), response.getDouble("peso"),
+                                                        response.getInt("sexo"), response.getString("auth_key"), response.getString("email"));
+                                                user.saveUserInFile(getApplicationContext());
+                                                Intent Index = new Intent(RegistoActivity.this, IndexActivity.class);
+                                                startActivity(Index);
+                                                finish();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                Toast.makeText(RegistoActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                    }
-                                }, new Response.ErrorListener() {
-                            public void onErrorResponse(VolleyError error) {
-                                //algum erro, por exemplo cena
-                                pb.setVisibility(View.GONE);
-                                cl.setEnabled(true);
-                                Toast.makeText(RegistoActivity.this, "Email já usado", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                                    }, new Response.ErrorListener() {
+                                public void onErrorResponse(VolleyError error) {
+                                    //algum erro, por exemplo cena
+                                    pb.setVisibility(View.GONE);
+                                    cl.setEnabled(true);
+                                    Toast.makeText(RegistoActivity.this, "Email já usado", Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
-                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        requestQueue.add(jsonObject);
-                    } catch (JSONException e) {
-                        pb.setVisibility(View.GONE);
-                        cl.setEnabled(true);
-                        Toast.makeText(RegistoActivity.this, "Ocurreu algum erro, tente mais tarde de novo", Toast.LENGTH_SHORT).show();
+                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                            requestQueue.add(jsonObject);
+                        } catch (JSONException e) {
+                            pb.setVisibility(View.GONE);
+                            cl.setEnabled(true);
+                            Toast.makeText(RegistoActivity.this, "Ocurreu algum erro, tente mais tarde de novo", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(RegistoActivity.this, "Não existe uma ligação a internet!", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
 
@@ -271,15 +273,4 @@ public class RegistoActivity extends AppCompatActivity {
         }
         return age;
     }
-
-    private void NetError() {
-        if (com.androidstudy.checknetworkconnection.NetStatus.getInstance(getApplicationContext()).isOnline()) {
-            Toast.makeText(getApplicationContext(), "Registo bem sucedido", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(getBaseContext(), LoginActivity.class);
-            startActivity(i);
-        } else {
-            Toast.makeText(getApplicationContext(), "Sem internet, por favor conecte-se a uma rede", Toast.LENGTH_SHORT).show();
-        }
-    }
-
 }

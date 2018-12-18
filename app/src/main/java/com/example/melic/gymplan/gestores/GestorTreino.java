@@ -2,6 +2,7 @@ package com.example.melic.gymplan.gestores;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,6 +17,7 @@ import com.example.melic.gymplan.classes.CategoriaTreino;
 import com.example.melic.gymplan.classes.DificuldadeTreino;
 import com.example.melic.gymplan.classes.Exercicio;
 import com.example.melic.gymplan.classes.ModeloBDHelper;
+import com.example.melic.gymplan.classes.NetStatus;
 import com.example.melic.gymplan.classes.SingletonData;
 import com.example.melic.gymplan.classes.Treino;
 import com.example.melic.gymplan.menuTreinos;
@@ -65,7 +67,11 @@ public class GestorTreino {
         treinos = new ArrayList<>();
         if(escolha == ONLINE){
             //getDataFromAPI();
-            getAllDataFromAPI();
+            if(NetStatus.getInstance(context).isOnline()) {
+                getAllDataFromAPI();
+            }else{
+                Toast.makeText(context, "Não existe uma ligação a internet!", Toast.LENGTH_SHORT).show();
+            }
         }else{
             getDadosFromDB();
         }
