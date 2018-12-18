@@ -67,9 +67,10 @@ public class RegistoActivity extends AppCompatActivity {
         this.btRegistar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkValues()){
+                if (checkValues()) {
+                    NetError();
                     final ProgressBar pb = (ProgressBar) findViewById(R.id.progressBarRegisto);
-                    final ConstraintLayout cl = (ConstraintLayout)findViewById(R.id.clRegisto);
+                    final ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.clRegisto);
                     try {
                         JSONObject jsonBody = new JSONObject();
                         jsonBody.put("primeiroNome", etPrimeiroNome.getText());
@@ -88,28 +89,24 @@ public class RegistoActivity extends AppCompatActivity {
                                 getResources().getString(R.string.url) + URL,
                                 jsonBody,
                                 new Response.Listener<JSONObject>() {
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    User user = new User(response.getInt("id"),response.getString("primeiroNome"),response.getString("ultimoNome"),
-                                            in.parse(response.getString("dataNascimento")), response.getDouble("altura"),response.getDouble("peso"),
-                                            response.getInt("sexo"),response.getString("auth_key"),response.getString("email"));
-                                    user.saveUserInFile(getApplicationContext());
-                                    Intent Index = new Intent(RegistoActivity.this,IndexActivity.class);
-                                    startActivity(Index);
-                                    finish();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(RegistoActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                /*Intent login = new Intent(RegistoActivity.this,LoginActivity.class);
-                                login.putExtra("email",etEmail.getText().toString());
-                                login.putExtra("password",etPassword.getText().toString());
-                                startActivity(login);*/
-                            }
-                        }, new Response.ErrorListener() {
+                                    public void onResponse(JSONObject response) {
+                                        try {
+                                            SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            User user = new User(response.getInt("id"), response.getString("primeiroNome"), response.getString("ultimoNome"),
+                                                    in.parse(response.getString("dataNascimento")), response.getDouble("altura"), response.getDouble("peso"),
+                                                    response.getInt("sexo"), response.getString("auth_key"), response.getString("email"));
+                                            user.saveUserInFile(getApplicationContext());
+                                            Intent Index = new Intent(RegistoActivity.this, IndexActivity.class);
+                                            startActivity(Index);
+                                            finish();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(RegistoActivity.this, "Algo não esta bem", Toast.LENGTH_SHORT).show();
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
                             public void onErrorResponse(VolleyError error) {
                                 //algum erro, por exemplo cena
                                 pb.setVisibility(View.GONE);
@@ -125,8 +122,10 @@ public class RegistoActivity extends AppCompatActivity {
                         cl.setEnabled(true);
                         Toast.makeText(RegistoActivity.this, "Ocurreu algum erro, tente mais tarde de novo", Toast.LENGTH_SHORT).show();
                     }
+
                 }
             }
+
         });
 
         this.rbMasculino.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +208,7 @@ public class RegistoActivity extends AppCompatActivity {
                                                                 if (splitterPeso[0].length() >= 1 && splitterPeso[1].length() >= 1 && splitterPeso[0].length() <= 3 && splitterPeso[1].length() <= 3) {
                                                                     if (altura >= 1 && altura <= 2.50) {
                                                                         if (peso >= 25 && peso <= 300) {
-                                                                            return true;
+                                                                                return true;
                                                                         } else {
                                                                             Toast.makeText(getApplicationContext(), "O peso deverá ser superior a 25 kg e inferior a 300 kg", Toast.LENGTH_LONG).show();
                                                                         }
@@ -271,6 +270,16 @@ public class RegistoActivity extends AppCompatActivity {
             age--;
         }
         return age;
+    }
+
+    private void NetError() {
+        if (com.androidstudy.checknetworkconnection.NetStatus.getInstance(getApplicationContext()).isOnline()) {
+            Toast.makeText(getApplicationContext(), "Registo bem sucedido", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(i);
+        } else {
+            Toast.makeText(getApplicationContext(), "Sem internet, por favor conecte-se a uma rede", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
