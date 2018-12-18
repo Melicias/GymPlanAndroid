@@ -78,6 +78,12 @@ public class Exercicio implements Serializable {
     public String toString() {
         return "Repetições: " + repeticoes ;
     }
+
+    public boolean compareValues(Exercicio e){
+        if(this.descricao.equals(e.getDescricao()) && this.nome.equals(e.getNome()) && this.foto.equals(e.getDescricao()) && this.duracao == e.getDuracao() && this.repeticoes == e.getRepeticoes())
+            return true;
+        return false;
+    }
 }
 
 
