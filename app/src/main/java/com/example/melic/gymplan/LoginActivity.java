@@ -59,8 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         this.btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NetError();
                 if (checkValues()) {
+                    NetError();
                     efetuarLogin(etEmail.getText().toString(),etPassword.getText().toString());
                 }
                 InputMethodManager inputManager = (InputMethodManager) getSystemService(getApplication().INPUT_METHOD_SERVICE);
