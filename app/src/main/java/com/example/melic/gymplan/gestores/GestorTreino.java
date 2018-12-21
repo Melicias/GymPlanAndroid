@@ -199,17 +199,23 @@ public class GestorTreino {
         jsonArrayRequest.setRetryPolicy(new RetryPolicy() {
             @Override
             public int getCurrentTimeout() {
-                return 25000;
+                return 15000;
             }
 
             @Override
             public int getCurrentRetryCount() {
-                return 25000;
+                return 15000;
             }
 
             @Override
             public void retry(VolleyError error) throws VolleyError {
-                Log.d("treino", "ERRO: asd treino");
+                if (error.networkResponse.statusCode == 401)
+                {
+                    ((IndexActivity)context).progressBar(false);
+                    Toast.makeText(context, "Experimente fazer logout e tentar entrar que houve algum problemas com a autenticação", Toast.LENGTH_SHORT).show();
+
+                    throw new VolleyError("Client is not authorized, retry is pointless");
+                }
             }
         });
         // Add JsonArrayRequest to the RequestQueue

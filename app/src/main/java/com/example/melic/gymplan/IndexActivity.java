@@ -138,12 +138,9 @@ public class IndexActivity extends AppCompatActivity
             if(NetStatus.getInstance(this).isOnline()) {
                 ModeloBDHelper modeloDB = SingletonData.getInstance(getApplicationContext(),0).getModeloDB();
                 modeloDB.updateDBFromApi();
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                navigationView.setCheckedItem(R.id.nav_meusPlanos);
             }else{
                 Toast.makeText(this, "Não existe uma ligação a internet!", Toast.LENGTH_SHORT).show();
             }
-
         }
 
         if (fragment != null) {
@@ -170,5 +167,13 @@ public class IndexActivity extends AppCompatActivity
 
         navigationView.setCheckedItem(opcao);
         onNavigationItemSelected(navigationView.getMenu().findItem(opcao));
+    }
+
+    public void updatesMeusTreinos(){
+        menuTreinos frag = (menuTreinos) getSupportFragmentManager().findFragmentByTag("meusTreinos");
+        if(frag != null){
+            frag.updateAfterAddRemove();
+            frag.updateSpinners();
+        }
     }
 }

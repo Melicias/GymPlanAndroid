@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 public class ModeloBDHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "gymplan";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 5;
     private final SQLiteDatabase database;
     private Context context;
 
@@ -191,7 +192,7 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
     }
 
     public DificuldadeTreino getDificuldadeById(int idDificuldade){
-        Cursor cursor = this.database.rawQuery("SELECT * FROM " + TABLE_DIFICULDADE, null);
+        Cursor cursor = this.database.rawQuery("SELECT * FROM " + TABLE_DIFICULDADE + " WHERE " + ID_DIFICULDADE + " = " + idDificuldade, null);
         DificuldadeTreino dt;
         cursor.moveToFirst();
         dt = new DificuldadeTreino(cursor.getInt(0),cursor.getInt(1));
@@ -199,7 +200,7 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
     }
 
     public CategoriaTreino getCategoriaById(int idCategoria){
-        Cursor cursor = this.database.rawQuery("SELECT * FROM " + TABLE_CATEGORIA, null);
+        Cursor cursor = this.database.rawQuery("SELECT * FROM " + TABLE_CATEGORIA  + " WHERE " + ID_CATEGORIA + " = " + idCategoria, null);
         CategoriaTreino ct;
         cursor.moveToFirst();
         ct = new CategoriaTreino(cursor.getInt(0),cursor.getString(1));
@@ -357,6 +358,7 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
             if (!doesExerciciosHaveTreinos(treino.getExercicio(i).getId(),treino.getId()))
                 this.database.delete(TABLE_EXERCICIO, ID_EXERCICIO + " = ?", new String[]{"" + treino.getExercicio(i)});
         }
+        ((IndexActivity)context).updatesMeusTreinos();
     }
 
     private boolean doesCategoriaHaveTreinos(int idCategoria){
@@ -493,6 +495,12 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
 
             @Override
             public void retry(VolleyError error) throws VolleyError {
+                if (error.networkResponse.statusCode == 401)
+                {
+                    Toast.makeText(context, "Experimente fazer logout e tentar entrar que houve algum problemas com a autenticação", Toast.LENGTH_SHORT).show();
+
+                    throw new VolleyError("Client is not authorized, retry is pointless");
+                }
             }
         });
         // Add JsonArrayRequest to the RequestQueue
@@ -505,13 +513,13 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
             for (int j = 0; j < treinosOffline.size(); j++){
                 if(treinosOnline.get(i).getId() == treinosOffline.get(j).getId()){
                     removerTreino(treinosOffline.get(j));
-                    SingletonData.getInstance(context,0).removeTreino(treinosOffline.get(j));
                     guardarTreino(treinosOnline.get(i));
-                    SingletonData.getInstance(context,0).addTreinoOffline(treinosOnline.get(i));
-                    return;
+                    break;
                 }
             }
         }
+        ((IndexActivity)context).mudarParaMenuTreino(R.id.nav_meusPlanos);
+        ((IndexActivity)context).updatesMeusTreinos();
     }
 
 
