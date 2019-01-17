@@ -253,6 +253,53 @@ public class menuTreinos extends Fragment {
             clTreinos.setVisibility(View.GONE);
             btRederecionarMenuTreinos.setVisibility(View.VISIBLE);
         }
+        final GestorCategoria gc = SingletonData.getInstance(getActivity(), MEU).getGestorCategorias(MEU);
+        ArrayAdapter<String> spinnerArrayAdapterCategoria = new ArrayAdapter<String>(
+                getContext(),R.layout.spinner_item,gc.getCategoriasString()){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    tv.setTextColor(Color.GRAY);
+                }
+                return view;
+            }
+        };
+        final GestorDificuldade gd = SingletonData.getInstance(getActivity(), MEU).getGestorDificuldades(MEU);
+        ArrayAdapter<String> spinnerArrayAdapterDificuldade = new ArrayAdapter<String>(
+                getContext(),R.layout.spinner_item,gd.getDificuldadesString()){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    tv.setTextColor(Color.GRAY);
+                }
+                return view;
+            }
+        };
+        spCategoria.setAdapter(spinnerArrayAdapterCategoria);
+        spDificuldade.setAdapter(spinnerArrayAdapterDificuldade);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

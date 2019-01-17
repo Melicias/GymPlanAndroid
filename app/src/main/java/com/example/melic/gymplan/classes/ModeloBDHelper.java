@@ -359,6 +359,9 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
                 this.database.delete(TABLE_EXERCICIO, ID_EXERCICIO + " = ?", new String[]{"" + treino.getExercicio(i)});
         }
         ((IndexActivity)context).updatesMeusTreinos();
+        //code added after
+        menuTreinos frag = (menuTreinos) ((IndexActivity)context).getSupportFragmentManager().findFragmentByTag("meusTreinos");
+        frag.updateAfterAddRemove();
     }
 
     private boolean doesCategoriaHaveTreinos(int idCategoria){

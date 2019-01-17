@@ -92,8 +92,8 @@ public class Treinos_Adapter extends
                     ModeloBDHelper modeloDB = SingletonData.getInstance(context,escolha).getModeloDB();
                     modeloDB.removerTreino(treino);
                     //update
-                    menuTreinos frag = (menuTreinos) ((IndexActivity)context).getSupportFragmentManager().findFragmentByTag("meusTreinos");
-                    frag.updateAfterAddRemove();
+                    //menuTreinos frag = (menuTreinos) ((IndexActivity)context).getSupportFragmentManager().findFragmentByTag("meusTreinos");
+                    //frag.updateAfterAddRemove();
                     removeUpdate(treino);
                     Toast.makeText(context, "Treino removido com sucesso!", Toast.LENGTH_SHORT).show();
                 }
