@@ -163,4 +163,11 @@ public class SingletonData {
     public void removeTreino(Treino treino){
         this.gestorTreinoOffline.removeTreino(treino);
     }
+
+    public void ordernar(){
+        this.gestorCategoriasOnline.ordenarCategorias();
+        this.gestorDificuldadesOnline.ordenarDificuldades();
+        this.gestorCategoriasOffline.ordenarCategorias();
+        this.gestorDificuldadesOffline.ordenarDificuldades();
+    }
 }

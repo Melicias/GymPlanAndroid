@@ -22,7 +22,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class User implements Serializable {
     private int id,sexo;
@@ -111,4 +113,5 @@ public class User implements Serializable {
     }
 
     public String getEmail(){return this.email;}
+
 }

@@ -23,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GestorCategoria {
     /*
@@ -33,7 +35,8 @@ public class GestorCategoria {
     public static final int ONLINE = 1;
     public static final int OFFLINE = 2;
 
-    private static final String URL = "categoria?access-token=";
+    //private static final String URL = "categoria?access-token=";
+    private static final String URL = "categoria/categoriasordenadas?access-token=";
 
     private Context context;
     private ModeloBDHelper modeloDB;
@@ -185,5 +188,16 @@ public class GestorCategoria {
 
     public void removeCategoria(CategoriaTreino cat){
         this.categorias.remove(cat);
+    }
+
+    public void ordenarCategorias(){
+        Collections.sort(categorias, new Comparator<CategoriaTreino>() {
+            @Override
+            public int compare(CategoriaTreino cat1, CategoriaTreino cat2)
+            {
+
+                return  cat1.getNome().compareTo(cat2.getNome());
+            }
+        });
     }
 }

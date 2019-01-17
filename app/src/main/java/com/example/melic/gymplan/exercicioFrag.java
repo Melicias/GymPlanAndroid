@@ -18,6 +18,9 @@ import com.example.melic.gymplan.classes.DownloadImageTask;
 import com.example.melic.gymplan.classes.Exercicio;
 import com.squareup.picasso.Picasso;
 
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -107,7 +110,11 @@ public class exercicioFrag extends Fragment {
                     cdt = new CountDownTimer(timeProgress,1000) {
                         @Override
                         public void onTick(long l) {
-                            tvDuracaoRepeticoes.setText(l/1000 + "s");
+                            String text = String.format(Locale.getDefault(), "Duração: %02d:%02d",
+                                    TimeUnit.MILLISECONDS.toMinutes(l) % 60,
+                                    TimeUnit.MILLISECONDS.toSeconds(l) % 60);
+                            //tvDuracaoRepeticoes.setText(l/1000 + "s");
+                            tvDuracaoRepeticoes.setText(text);
                             timeProgress = l;
                         }
 

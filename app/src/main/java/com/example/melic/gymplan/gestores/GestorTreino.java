@@ -180,6 +180,9 @@ public class GestorTreino {
                             }
                             SingletonData.getInstance(context, GestorTreino.ONLINE).setTreinos(treinos);
                             ((IndexActivity)context).progressBar(false);
+
+                            SingletonData.getInstance(context, GestorTreino.ONLINE).ordernar();
+
                         }catch (JSONException e){
                             e.printStackTrace();
                             Log.d("treino", "OLA2");

@@ -22,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GestorDificuldade {
 
@@ -33,7 +35,8 @@ public class GestorDificuldade {
     public static final int ONLINE = 1;
     public static final int OFFLINE = 2;
 
-    private static final String URL = "dificuldade?access-token=";
+    //private static final String URL = "dificuldade?access-token=";
+    private static final String URL = "dificuldade/dificuldadesordenadas?access-token=";
 
     private Context context;
     private String accessToken;
@@ -189,5 +192,16 @@ public class GestorDificuldade {
 
     public void removeDificuldade(DificuldadeTreino dif){
         this.dificuldades.remove(dif);
+    }
+
+    public void ordenarDificuldades(){
+        Collections.sort(dificuldades, new Comparator<DificuldadeTreino>() {
+            @Override
+            public int compare(DificuldadeTreino dif1, DificuldadeTreino dif2)
+            {
+
+                return  dif1.getDificuldade() - dif2.getDificuldade();
+            }
+        });
     }
 }

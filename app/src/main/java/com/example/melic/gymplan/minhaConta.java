@@ -36,7 +36,7 @@ public class minhaConta extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    EditText etPrimeiroNome,etApelido,etAltura,etPeso;
+    EditText etPrimeiroNome,etApelido,etAltura,etPeso,etEmail;
     Button btAtualizarDados;
     ConstraintLayout cl;
     ProgressBar pb;
@@ -78,6 +78,7 @@ public class minhaConta extends Fragment {
         this.etApelido = (EditText) view.findViewById(R.id.etApelido);
         this.etAltura = (EditText) view.findViewById(R.id.etAltura);
         this.etPeso = (EditText) view.findViewById(R.id.etPeso);
+        this.etEmail = (EditText) view.findViewById(R.id.etEmail);
         this.btAtualizarDados = (Button) view.findViewById(R.id.btAtualizarDados);
         this.cl = (ConstraintLayout) view.findViewById(R.id.clMinhaConta);
         this.pb = (ProgressBar) view.findViewById(R.id.pbMinhaConta);
@@ -89,6 +90,7 @@ public class minhaConta extends Fragment {
         this.etApelido.setText(this.user.getUltimoNome());
         this.etAltura.setText(this.user.getAltura() + "");
         this.etPeso.setText(this.user.getPeso() + "");
+        this.etEmail.setText(this.user.getEmail());
 
         this.btAtualizarDados.setOnClickListener(new View.OnClickListener() {
 
