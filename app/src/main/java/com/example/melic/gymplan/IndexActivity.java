@@ -176,4 +176,11 @@ public class IndexActivity extends AppCompatActivity
             frag.updateSpinners();
         }
     }
+
+    public void updateTotalMeusTreinos(){
+        menuTreinos frag = (menuTreinos) getSupportFragmentManager().findFragmentByTag("meusTreinos");
+        if(frag != null){
+            frag.updateTotal();
+        }
+    }
 }

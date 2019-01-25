@@ -40,6 +40,7 @@ public class GestorTreino {
 
     //private static final String URL = "treino/exercicios?access-token=";
     private static final String URL = "treino/exercicioscd?access-token=";
+    private static final String URL2 = "user-treinos/treinosbyuser?access-token=";
 
     private Context context;
     private String accessToken;
@@ -57,9 +58,10 @@ public class GestorTreino {
         choice(escolha);
     }
 
-    public GestorTreino(Context context, int escolha, ModeloBDHelper modeloDB){
+    public GestorTreino(Context context, int escolha, ModeloBDHelper modeloDB,String accessToken){
         this.context = context;
         this.modeloDB = modeloDB;
+        this.accessToken = accessToken;
         choice(escolha);
     }
 
@@ -73,7 +75,12 @@ public class GestorTreino {
                 Toast.makeText(context, "Não existe uma ligação a internet!", Toast.LENGTH_SHORT).show();
             }
         }else{
-            getDadosFromDB();
+            if(NetStatus.getInstance(context).isOnline()) {
+                getDadosFromAPIAndDB();
+            }else{
+                Toast.makeText(context, "Não existe uma ligação a internet!", Toast.LENGTH_SHORT).show();
+                getDadosFromDB();
+            }
         }
         if(escolha == TESTE) {
             this.treinos = new ArrayList<>();
@@ -83,6 +90,114 @@ public class GestorTreino {
 
     private void getDadosFromDB(){
         this.treinos = modeloDB.getAllTreinos();
+    }
+
+    private void getDadosFromAPIAndDB(){
+        // Initialize a new RequestQueue instance
+        RequestQueue requestQueue = Volley.newRequestQueue(this.context);
+        IndexActivity act = (IndexActivity)context;
+        // Initialize a new JsonArrayRequest instance
+        String url = context.getResources().getString(R.string.url) + URL2 + accessToken;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Process the JSON
+                        try{
+                            modeloDB.deleteDataFromDB();
+                            for(int i=0;i<response.length();i++){
+                                JSONObject obj = response.getJSONObject(i);
+
+                                //get treino
+                                JSONObject tre = obj.getJSONObject("treino");
+                                int id = tre.getInt("id_treino");
+                                String nome = tre.getString("nome");
+                                String descricao = tre.getString("descricao");
+                                int repeticoes = tre.getInt("repeticoes");
+                                //get categoria
+                                JSONObject cat = obj.getJSONObject("categoria");
+                                int id_categoria = cat.getInt("id_categoria");
+                                String nomeCategoria = cat.getString("nome");
+                                //get dificuldade
+                                JSONObject dif = obj.getJSONObject("dificuldade");
+                                int id_dificuldade = dif.getInt("id_dificuldade");
+                                int dificuldade = dif.getInt("dificuldade");
+
+                                CategoriaTreino c = new CategoriaTreino(id_categoria,nomeCategoria);
+                                DificuldadeTreino d = new DificuldadeTreino(id_dificuldade,dificuldade);
+                                //Treino treino = new Treino(id,nome,descricao,repeticoes,dificuldades.getDificuldadeByID(id_dificuldade),categorias.getCategoriaByID(id_categoria));
+                                Treino treino = new Treino(id,nome,descricao,repeticoes,d,c);
+
+                                SingletonData.getInstance(context, GestorCategoria.ONLINE).setCategoriaOnline(c);
+                                SingletonData.getInstance(context, GestorCategoria.ONLINE).setDificuldadeOnline(d);
+
+                                JSONArray exer = obj.getJSONArray("exercicios");
+                                ArrayList<Exercicio> exercicios = new ArrayList<>();
+                                for(int j=0;j<exer.length();j++){
+                                    Log.d("treino", "j" + j);
+                                    JSONObject obj2 = exer.getJSONObject(j);
+                                    int id_exercicio = obj2.getInt("id_exercicio");
+                                    String foto = obj2.getString("foto");
+                                    nome = obj2.getString("nome");
+                                    descricao = obj2.getString("descricao");
+                                    Exercicio e;
+                                    if(!obj2.isNull("repeticoes")){
+                                        repeticoes = obj2.getInt("repeticoes");
+                                        e = new Exercicio(id_exercicio,foto,nome,descricao,repeticoes,true);
+                                    }else{
+                                        int tempo = obj2.getInt("tempo");
+                                        e = new Exercicio(id_exercicio,foto,nome,descricao,tempo,false);
+                                    }
+                                    exercicios.add(e);
+                                }
+                                treino.setExercicios(exercicios);
+                                modeloDB.guardarTreino(treino);
+                            }
+                            treinos = modeloDB.getAllTreinos();
+                            SingletonData.getInstance(context, GestorTreino.OFFLINE).setTreinosOffline(treinos);
+                            ((IndexActivity)context).updateTotalMeusTreinos();
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                            ((IndexActivity)context).progressBar(false);
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        ((IndexActivity)context).progressBar(false);
+                    }
+                }
+        );
+
+        jsonArrayRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 15000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 15000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+                if (error.networkResponse.statusCode == 401)
+                {
+                    ((IndexActivity)context).progressBar(false);
+                    Toast.makeText(context, "Experimente fazer logout e tentar entrar que houve algum problemas com a autenticação", Toast.LENGTH_SHORT).show();
+
+                    throw new VolleyError("Client is not authorized, retry is pointless");
+                }
+            }
+        });
+        // Add JsonArrayRequest to the RequestQueue
+        requestQueue.add(jsonArrayRequest);
+
     }
 
     private void adicionarDados(){
@@ -180,7 +295,6 @@ public class GestorTreino {
                             }
                             SingletonData.getInstance(context, GestorTreino.ONLINE).setTreinos(treinos);
                             ((IndexActivity)context).progressBar(false);
-
                             SingletonData.getInstance(context, GestorTreino.ONLINE).ordernar();
 
                         }catch (JSONException e){
@@ -224,102 +338,6 @@ public class GestorTreino {
         // Add JsonArrayRequest to the RequestQueue
         requestQueue.add(jsonArrayRequest);
     }
-
-    /*private void getDataFromAPI(){
-        // Initialize a new RequestQueue instance
-        RequestQueue requestQueue = Volley.newRequestQueue(this.context);
-
-        // Initialize a new JsonArrayRequest instance
-        String url = context.getResources().getString(R.string.url) + URL + accessToken;
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        // Process the JSON
-                        try{
-                            // Loop through the array elements
-                            for(int i=0;i<response.length();i++){
-                                Log.d("treino", "i" + i);
-                                GestorCategoria categorias = SingletonData.getInstance(context, GestorCategoria.ONLINE).getGestorCategorias(GestorCategoria.ONLINE);
-                                GestorDificuldade dificuldades = SingletonData.getInstance(context, GestorDificuldade.ONLINE).getGestorDificuldades(GestorDificuldade.ONLINE);
-
-                                // Get current json object
-                                JSONObject obj = response.getJSONObject(i);
-
-                                JSONObject tre = obj.getJSONObject("treino");
-                                int id = tre.getInt("id_treino");
-                                String nome = tre.getString("nome");
-                                String descricao = tre.getString("descricao");
-                                int id_categoria = tre.getInt("id_categoria");
-                                int id_dificuldade = tre.getInt("id_dificuldade");
-                                int repeticoes = tre.getInt("repeticoes");
-
-                                Treino treino = new Treino(id,nome,descricao,repeticoes,dificuldades.getDificuldadeByID(id_dificuldade),categorias.getCategoriaByID(id_categoria));
-
-                                JSONArray exer = obj.getJSONArray("exercicios");
-                                ArrayList<Exercicio> exercicios = new ArrayList<>();
-                                for(int j=0;j<exer.length();j++){
-                                    Log.d("treino", "j" + j);
-                                    JSONObject obj2 = exer.getJSONObject(j);
-                                    int id_exercicio = obj2.getInt("id_exercicio");
-                                    String foto = obj2.getString("foto");
-                                    nome = obj2.getString("nome");
-                                    descricao = obj2.getString("descricao");
-                                    Exercicio e;
-                                    if(!obj2.isNull("repeticoes")){
-                                        repeticoes = obj2.getInt("repeticoes");
-                                        e = new Exercicio(id_exercicio,foto,nome,descricao,repeticoes,true);
-                                    }else{
-                                        int tempo = obj2.getInt("tempo");
-                                        e = new Exercicio(id_exercicio,foto,nome,descricao,tempo,false);
-                                    }
-                                    exercicios.add(e);
-                                }
-                                treino.setExercicios(exercicios);
-                                treinos.add(treino);
-                            }
-                            SingletonData.getInstance(context, GestorTreino.ONLINE).setTreinos(treinos);
-                            ((IndexActivity)context).progressBar(false);
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                            Log.d("treino", "OLA2");
-                            ((IndexActivity)context).progressBar(false);
-                        }
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error){
-                        Log.d("treino", "OLA3");
-                        ((IndexActivity)context).progressBar(false);
-                    }
-                }
-        );
-
-        jsonArrayRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 25000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 25000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-                Log.d("treino", "ERRO: asd treino");
-            }
-        });
-        // Add JsonArrayRequest to the RequestQueue
-        requestQueue.add(jsonArrayRequest);
-    }*/
-
-
 
     public void setTreinos(ArrayList<Treino>tres){
         this.treinos = tres;

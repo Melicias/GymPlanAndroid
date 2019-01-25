@@ -60,7 +60,7 @@ public class SingletonData {
     public void realoadArraysOffline(){
         this.gestorCategoriasOffline = new GestorCategoria(context, GestorCategoria.OFFLINE, modeloDB);
         this.gestorDificuldadesOffline = new GestorDificuldade(context, GestorDificuldade.OFFLINE, modeloDB);
-        this.gestorTreinoOffline = new GestorTreino(context, GestorTreino.OFFLINE,modeloDB);
+        this.gestorTreinoOffline = new GestorTreino(context, GestorTreino.OFFLINE,modeloDB,this.user.getAuth_key());
 
     }
 
@@ -118,6 +118,10 @@ public class SingletonData {
 
     public void setTreinos(ArrayList<Treino>tres){
         this.gestorTreinoOnline.setTreinos(tres);
+    }
+
+    public void setTreinosOffline(ArrayList<Treino>tres){
+        this.gestorTreinoOffline.setTreinos(tres);
     }
 
     public boolean setCategoriaOnline(CategoriaTreino cat){

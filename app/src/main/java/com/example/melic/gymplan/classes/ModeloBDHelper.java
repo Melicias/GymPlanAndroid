@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.melic.gymplan.IndexActivity;
 import com.example.melic.gymplan.R;
@@ -30,9 +31,12 @@ import java.util.ArrayList;
 public class ModeloBDHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "gymplan";
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 7;
     private final SQLiteDatabase database;
     private Context context;
+
+    private static String URLADICIONAR = "user-treinos/adicionartreino?access-token=";
+    private static String URLREMOVER = "user-treinos/removertreino?access-token=";
 
     private static final String TABLE_DIFICULDADE = "Dificuldade";
     private static final String TABLE_CATEGORIA = "Categoria";
@@ -116,6 +120,14 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIFICULDADE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIA);
         this.onCreate(db);
+    }
+
+    public void deleteDataFromDB(){
+        database.delete(TABLE_TREINO_EXERCICIO, null, null);
+        database.delete(TABLE_EXERCICIO, null, null);
+        database.delete(TABLE_TREINO, null, null);
+        database.delete(TABLE_DIFICULDADE, null, null);
+        database.delete(TABLE_CATEGORIA, null, null);
     }
 
     public ArrayList<DificuldadeTreino> getAllDificuldades(){
@@ -228,7 +240,7 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    private boolean doesTreinoExist(int idTreino){
+    public boolean doesTreinoExist(int idTreino){
         Cursor cursor = this.database.rawQuery("SELECT 1 FROM " + TABLE_TREINO + " WHERE " + ID_TREINO + " = " + idTreino, null);
         if(cursor.getCount() == 0)
             return false;
@@ -236,6 +248,7 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
     }
 
     public boolean guardarTreino(Treino treino){
+        adicionarTreinoAPI(treino.getId());
         //ADD CATEGORIA
         if(!doesTreinoExist(treino.getId())) {
             if (!doesCategoriaExist(treino.getCategoria().getId())) {
@@ -290,6 +303,7 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
                     } else {
                         values.put(REPETICOES_EXERCICIO, e.getRepeticoes());
                     }
+
                     this.database.insert(TABLE_EXERCICIO, null, values);
                 } else {
                     Cursor cursorExercicio = this.database.rawQuery("SELECT * FROM " + TABLE_EXERCICIO + " WHERE " + ID_EXERCICIO + " = " + e.getId(), null);
@@ -324,6 +338,7 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
                             values.put(REPETICOES_EXERCICIO, e.getRepeticoes());
                             values.putNull(TEMPO_EXERCICIO);
                         }
+
                         this.database.update(TABLE_EXERCICIO, values, ID_EXERCICIO + " = ?", new String[]{"" + e.getId()});
                     }
                 }
@@ -331,13 +346,56 @@ public class ModeloBDHelper extends SQLiteOpenHelper {
                 values.put(ID_TREINO_TREINO_EXERCICIO, treino.getId());
                 values.put(ID_EXERCICIO_EXERCICIO, treino.getExercicio(i).getId());
                 this.database.insert(TABLE_TREINO_EXERCICIO, null, values);
+
+                
             }
             return true;
         }
         return false;
     }
 
+    private void adicionarTreinoAPI(int id_treino) {
+        User user = new User();
+        user = user.getUserFromFile(context);
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonObject = new JsonArrayRequest(
+                Request.Method.POST,
+                context.getResources().getString(R.string.url) + URLADICIONAR + user.getAuth_key() + "&id-treino=" + id_treino,
+                null,
+                new Response.Listener<JSONArray>() {
+                    public void onResponse(JSONArray response) {
+                        //guardado com sucesso
+                    }
+                }, new Response.ErrorListener() {
+            public void onErrorResponse(VolleyError error) {
+                //algum erro, por exemplo cena
+            }
+        });
+        requestQueue.add(jsonObject);
+    }
+
+    private void removerTreinoAPI(int id_treino) {
+        User user = new User();
+        user = user.getUserFromFile(context);
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonObject = new JsonArrayRequest(
+                Request.Method.POST,
+                context.getResources().getString(R.string.url) + URLREMOVER + user.getAuth_key() + "&id-treino=" + id_treino,
+                null,
+                new Response.Listener<JSONArray>() {
+                    public void onResponse(JSONArray response) {
+                        //removido com sucesso
+                    }
+                }, new Response.ErrorListener() {
+            public void onErrorResponse(VolleyError error) {
+                //algum erro, por exemplo cena
+            }
+        });
+        requestQueue.add(jsonObject);
+    }
+
     public void removerTreino(Treino treino) {
+        removerTreinoAPI(treino.getId());
         //DELETE TREINO_EXERCICIO
         this.database.delete(TABLE_TREINO_EXERCICIO, ID_TREINO + " = ?", new String[]{"" + treino.getId()});
         //DELETE TREINO

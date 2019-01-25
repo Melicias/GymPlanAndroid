@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.melic.gymplan.IndexActivity;
 import com.example.melic.gymplan.R;
 import com.example.melic.gymplan.classes.ModeloBDHelper;
+import com.example.melic.gymplan.classes.NetStatus;
 import com.example.melic.gymplan.classes.SingletonData;
 import com.example.melic.gymplan.classes.Treino;
 import com.example.melic.gymplan.exerciciosFrag;
@@ -69,33 +70,37 @@ public class Treinos_Adapter extends
         Repeticoes.setText("" +treino.getRepeticoes());
         NumeroExercicios.setText("" + treino.getExercicios().size());
 
-        if(escolha == menuTreinos.MENU){
+        if (escolha == menuTreinos.MENU) {
             ibSave.setVisibility(View.VISIBLE);
             ibSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ModeloBDHelper modeloDB = SingletonData.getInstance(context,escolha).getModeloDB();
-                    boolean guardou = modeloDB.guardarTreino(treino);
-                    if(guardou){
-                        Toast.makeText(context, "Treino guardado nos seus treinos!", Toast.LENGTH_SHORT).show();
+                    ModeloBDHelper modeloDB = SingletonData.getInstance(context, escolha).getModeloDB();
+                    if(NetStatus.getInstance(context).isOnline()) {
+                        boolean guardou = modeloDB.guardarTreino(treino);
+                        if (guardou) {
+                            Toast.makeText(context, "Treino guardado nos seus treinos!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Treino ja disponivel nos seus treinos.", Toast.LENGTH_SHORT).show();
+                        }
                     }else{
-                        Toast.makeText(context, "Treino ja disponivel nos seus treinos.", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(context, "Não existe uma ligação a internet!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-        }else{
+        } else {
             ibRemover.setVisibility(View.VISIBLE);
             ibRemover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ModeloBDHelper modeloDB = SingletonData.getInstance(context,escolha).getModeloDB();
-                    modeloDB.removerTreino(treino);
-                    //update
-                    //menuTreinos frag = (menuTreinos) ((IndexActivity)context).getSupportFragmentManager().findFragmentByTag("meusTreinos");
-                    //frag.updateAfterAddRemove();
-                    removeUpdate(treino);
-                    Toast.makeText(context, "Treino removido com sucesso!", Toast.LENGTH_SHORT).show();
+                    ModeloBDHelper modeloDB = SingletonData.getInstance(context, escolha).getModeloDB();
+                    if(NetStatus.getInstance(context).isOnline()) {
+                        modeloDB.removerTreino(treino);
+                        removeUpdate(treino);
+                        Toast.makeText(context, "Treino removido com sucesso!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context, "Não existe uma ligação a internet!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
